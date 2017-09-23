@@ -41,6 +41,7 @@ public class MainApplication extends Application {
         migrateLegacyPreferences(PreferenceManager.getDefaultSharedPreferences(this));
         // test
         // test
+        //test 3
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             registerChannel();
