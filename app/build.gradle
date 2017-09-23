@@ -5,12 +5,12 @@ android {
     buildToolsVersion '26.0.1'
 
     defaultConfig {
-        applicationId "org.traccar.client"
+        applicationId "com.gpsbase.client"
         buildConfigField "boolean", "HIDDEN_APP", "false"
         minSdkVersion 14
         targetSdkVersion 26
-        versionCode 40
-        versionName '5.3'
+        versionCode 41
+        versionName '1.0'
     }
 
     lintOptions {
@@ -21,7 +21,7 @@ android {
         regular
         google
         hidden {
-            applicationId "org.traccar.client.hidden"
+            applicationId "com.gpsbase.client.hidden"
             buildConfigField "boolean", "HIDDEN_APP", "true"
         }
     }
@@ -46,10 +46,10 @@ if (getGradle().getStartParameter().getTaskRequests().toString().contains("Googl
     apply plugin: 'com.google.gms.google-services'
 
     task copyJson(type: Copy) {
-        from '../../traccar-shared/google-services'
+        from '../../gpsbase-shared/google-services'
         into '.'
-        include 'traccar-client-android.json'
-        rename('traccar-client-android.json', 'google-services.json')
+        include 'gpsbase-client-android.json'
+        rename('gpsbase-client-android.json', 'google-services.json')
     }
 
     afterEvaluate {
