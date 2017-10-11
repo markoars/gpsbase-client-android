@@ -21,7 +21,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.gpsbase.client.gps.fragments.MainFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

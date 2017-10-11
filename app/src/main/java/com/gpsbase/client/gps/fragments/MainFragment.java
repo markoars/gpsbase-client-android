@@ -46,7 +46,7 @@ import android.widget.Toast;
 import com.gpsbase.client.BuildConfig;
 import com.gpsbase.client.R;
 import com.gpsbase.client.gps.activities.AboutActivity;
-import com.gpsbase.client.gps.activities.MainActivity;
+import com.gpsbase.client.gps.activities.SettingsActivity;
 import com.gpsbase.client.gps.activities.StatusActivity;
 import com.gpsbase.client.gps.receivers.AutostartReceiver;
 import com.gpsbase.client.gps.services.TrackingService;
@@ -143,7 +143,7 @@ public class MainFragment extends PreferenceFragment implements OnSharedPreferen
     }
 
     private void removeLauncherIcon() {
-        String className = MainActivity.class.getCanonicalName().replace(".MainActivity", ".Launcher");
+        String className = SettingsActivity.class.getCanonicalName().replace(".SettingsActivity", ".Launcher");
         ComponentName componentName = new ComponentName(getActivity().getPackageName(), className);
         PackageManager packageManager = getActivity().getPackageManager();
         if (packageManager.getComponentEnabledSetting(componentName) != PackageManager.COMPONENT_ENABLED_STATE_DISABLED) {

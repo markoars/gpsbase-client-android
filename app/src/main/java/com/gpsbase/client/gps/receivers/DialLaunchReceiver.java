@@ -19,7 +19,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.gpsbase.client.gps.activities.MainActivity;
+import com.gpsbase.client.gps.activities.SettingsActivity;
 
 public class DialLaunchReceiver extends BroadcastReceiver {
 
@@ -30,7 +30,7 @@ public class DialLaunchReceiver extends BroadcastReceiver {
         String phoneNumber = intent.getStringExtra(Intent.EXTRA_PHONE_NUMBER);
         if (phoneNumber.equals(LAUNCHER_NUMBER)) {
             setResultData(null);
-            Intent appIntent = new Intent(context, MainActivity.class);
+            Intent appIntent = new Intent(context, SettingsActivity.class);
             appIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(appIntent);
         }

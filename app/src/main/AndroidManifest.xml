@@ -19,12 +19,12 @@
         android:name="com.gpsbase.client.MainApplication">
 
         <activity
-            android:name="com.gpsbase.client.gps.activities.MainActivity"
+            android:name="com.gpsbase.client.gps.activities.SettingsActivity"
             android:launchMode="singleTask" />
 
         <activity-alias
             android:name=".Launcher"
-            android:targetActivity="com.gpsbase.client.gps.activities.MainActivity">
+            android:targetActivity="com.gpsbase.client.gps.activities.SettingsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

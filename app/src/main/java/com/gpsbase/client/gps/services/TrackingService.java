@@ -29,7 +29,7 @@ import android.util.Log;
 
 import com.gpsbase.client.MainApplication;
 import com.gpsbase.client.R;
-import com.gpsbase.client.gps.activities.MainActivity;
+import com.gpsbase.client.gps.activities.SettingsActivity;
 import com.gpsbase.client.gps.activities.StatusActivity;
 import com.gpsbase.client.gps.network.TrackingController;
 import com.gpsbase.client.gps.receivers.AutostartReceiver;
@@ -42,7 +42,7 @@ public class TrackingService extends Service {
     private TrackingController trackingController;
 
     private static Notification createNotification(Context context) {
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), 0);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, new Intent(context, SettingsActivity.class), 0);
         return new NotificationCompat.Builder(context, MainApplication.PRIMARY_CHANNEL)
                 .setContentTitle(context.getString(R.string.app_name))
                 .setContentText(context.getString(R.string.settings_status_on_summary))
