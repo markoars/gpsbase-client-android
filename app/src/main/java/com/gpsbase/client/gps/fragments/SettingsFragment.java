@@ -43,6 +43,7 @@ import android.view.MenuItem;
 import android.webkit.URLUtil;
 import android.widget.Toast;
 
+
 import com.gpsbase.client.BuildConfig;
 import com.gpsbase.client.R;
 import com.gpsbase.client.gps.activities.AboutActivity;
@@ -55,9 +56,9 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-public class MainFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
+public class SettingsFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
 
-    private static final String TAG = MainFragment.class.getSimpleName();
+    private static final String TAG = SettingsFragment.class.getSimpleName();
 
     private static final int ALARM_MANAGER_INTERVAL = 15000;
 

@@ -25,7 +25,7 @@ import android.os.BatteryManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.gpsbase.client.gps.fragments.MainFragment;
+import com.gpsbase.client.gps.fragments.SettingsFragment;
 import com.gpsbase.client.gps.models.Position;
 import com.gpsbase.client.gps.utils.DistanceCalculator;
 
@@ -60,10 +60,10 @@ public abstract class PositionProvider {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 
-        deviceId = preferences.getString(MainFragment.KEY_DEVICE, "undefined");
-        interval = Long.parseLong(preferences.getString(MainFragment.KEY_INTERVAL, "600")) * 1000;
-        distance = Integer.parseInt(preferences.getString(MainFragment.KEY_DISTANCE, "0"));
-        angle = Integer.parseInt(preferences.getString(MainFragment.KEY_ANGLE, "0"));
+        deviceId = preferences.getString(SettingsFragment.KEY_DEVICE, "undefined");
+        interval = Long.parseLong(preferences.getString(SettingsFragment.KEY_INTERVAL, "600")) * 1000;
+        distance = Integer.parseInt(preferences.getString(SettingsFragment.KEY_DISTANCE, "0"));
+        angle = Integer.parseInt(preferences.getString(SettingsFragment.KEY_ANGLE, "0"));
 
         if (distance > 0 || angle > 0) {
             requestInterval = MINIMUM_INTERVAL;
@@ -71,7 +71,7 @@ public abstract class PositionProvider {
             requestInterval = interval;
         }
 
-        type = preferences.getString(MainFragment.KEY_PROVIDER, "gps");
+        type = preferences.getString(SettingsFragment.KEY_PROVIDER, "gps");
     }
 
     public abstract void startUpdates();

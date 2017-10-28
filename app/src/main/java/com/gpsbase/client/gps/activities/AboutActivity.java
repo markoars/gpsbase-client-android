@@ -15,6 +15,7 @@
  */
 package com.gpsbase.client.gps.activities;
 
+import android.app.ActionBar;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -28,7 +29,7 @@ public class AboutActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.about);
+        setContentView(R.layout.activity_about);
 
         TextView title = findViewById(R.id.title);
         try {
@@ -36,6 +37,15 @@ public class AboutActivity extends AppCompatActivity {
         } catch (NameNotFoundException e) {
             Log.w(AboutActivity.class.getSimpleName(), e);
         }
+
+        // set back button
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+    @Override
+    public boolean onSupportNavigateUp(){
+        // Go back to prev activity
+        finish();
+        return true;
+    }
 }

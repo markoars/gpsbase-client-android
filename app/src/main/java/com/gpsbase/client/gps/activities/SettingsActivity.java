@@ -19,7 +19,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
-import com.gpsbase.client.gps.fragments.MainFragment;
+import com.gpsbase.client.gps.fragments.SettingsFragment;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -27,8 +27,18 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction().replace(android.R.id.content, new MainFragment()).commit();
+            getFragmentManager().beginTransaction().replace(android.R.id.content, new SettingsFragment()).commit();
         }
+
+        // set back button
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        // Go back to prev activity
+        finish();
+        return true;
     }
 
 }

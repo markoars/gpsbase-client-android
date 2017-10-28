@@ -23,7 +23,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.gpsbase.client.gps.utils.DatabaseHelper;
-import com.gpsbase.client.gps.fragments.MainFragment;
+import com.gpsbase.client.gps.fragments.SettingsFragment;
 import com.gpsbase.client.R;
 import com.gpsbase.client.gps.activities.StatusActivity;
 import com.gpsbase.client.gps.models.Position;
@@ -63,7 +63,7 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
         this.context = context;
         handler = new Handler();
         preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        if (preferences.getString(MainFragment.KEY_PROVIDER, "gps").equals("mixed")) {
+        if (preferences.getString(SettingsFragment.KEY_PROVIDER, "gps").equals("mixed")) {
             positionProvider = new MixedPositionProvider(context, this);
         } else {
             positionProvider = new SimplePositionProvider(context, this);
@@ -72,7 +72,7 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
         networkManager = new NetworkManager(context, this);
         isOnline = networkManager.isOnline();
 
-        url = preferences.getString(MainFragment.KEY_URL, context.getString(R.string.settings_url_default_value));
+        url = preferences.getString(SettingsFragment.KEY_URL, context.getString(R.string.settings_url_default_value));
 
         PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
@@ -161,7 +161,7 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
             public void onComplete(boolean success, Position result) {
                 if (success) {
                     if (result != null) {
-                        if (result.getDeviceId().equals(preferences.getString(MainFragment.KEY_DEVICE, null))) {
+                        if (result.getDeviceId().equals(preferences.getString(SettingsFragment.KEY_DEVICE, null))) {
                             send(result);
                         } else {
                             delete(result);

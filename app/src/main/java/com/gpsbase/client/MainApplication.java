@@ -27,7 +27,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager;
 
-import com.gpsbase.client.gps.fragments.MainFragment;
+import com.gpsbase.client.gps.fragments.SettingsFragment;
 
 public class MainApplication extends Application {
 
@@ -66,7 +66,7 @@ public class MainApplication extends Application {
             Uri.Builder builder = new Uri.Builder();
             builder.scheme(scheme).encodedAuthority(host + ":" + port).build();
             SharedPreferences.Editor editor = preferences.edit();
-            editor.putString(MainFragment.KEY_URL, builder.toString());
+            editor.putString(SettingsFragment.KEY_URL, builder.toString());
 
             editor.remove("port");
             editor.remove("address");
