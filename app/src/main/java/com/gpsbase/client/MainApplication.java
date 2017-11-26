@@ -43,6 +43,7 @@ public class MainApplication extends Application {
         // test
         //test 3
 
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             registerChannel();
         }

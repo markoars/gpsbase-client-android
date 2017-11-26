@@ -30,6 +30,7 @@
         </activity>
         <activity android:name=".gps.activities.StatusActivity" />
         <activity android:name=".gps.activities.AboutActivity" />
+        <activity android:name=".gps.activities.SessionActivity" />
         <activity android:name=".gps.activities.ShortcutActivity" />
 
         <service android:name=".gps.services.TrackingService" />
