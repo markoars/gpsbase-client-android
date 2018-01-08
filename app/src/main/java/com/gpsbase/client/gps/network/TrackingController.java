@@ -16,12 +16,14 @@
 package com.gpsbase.client.gps.network;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.gpsbase.client.MainApplication;
 import com.gpsbase.client.gps.utils.DatabaseHelper;
 import com.gpsbase.client.gps.fragments.SettingsFragment;
 import com.gpsbase.client.R;
@@ -42,6 +44,8 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
     private SharedPreferences preferences;
 
     private String url;
+    private int selectedSessionId;
+    private String customerId;
 
     private PositionProvider positionProvider;
     private DatabaseHelper databaseHelper;
@@ -71,6 +75,8 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
         databaseHelper = new DatabaseHelper(context);
         networkManager = new NetworkManager(context, this);
         isOnline = networkManager.isOnline();
+
+
 
         url = preferences.getString(SettingsFragment.KEY_URL, context.getString(R.string.settings_url_default_value));
 
@@ -104,7 +110,15 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
     public void onPositionUpdate(Position position) {
         StatusActivity.addMessage(context.getString(R.string.status_location_update));
         if (position != null) {
+
             write(position);
+
+            // Inform the UI of new location
+            Intent intent = new Intent("com.gpsbase.client_location_update");
+            intent.putExtra("longitude",position.getLongitude());
+            intent.putExtra("latitude", position.getLatitude());
+            context.sendBroadcast(intent);
+
         }
     }
 
@@ -139,7 +153,12 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
     private void write(Position position) {
         log("write", position);
         lock();
-        databaseHelper.insertPositionAsync(position, new DatabaseHelper.DatabaseHandler<Void>() {
+
+
+        selectedSessionId = ((MainApplication) context.getApplicationContext()).getSelectedSession();
+
+
+        databaseHelper.insertPositionAsync(position, 111, selectedSessionId, new DatabaseHelper.DatabaseHandler<Void>() {
             @Override
             public void onComplete(boolean success, Void result) {
                 if (success) {
@@ -163,8 +182,9 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
                     if (result != null) {
                         if (result.getDeviceId().equals(preferences.getString(SettingsFragment.KEY_DEVICE, null))) {
                             send(result);
+
                         } else {
-                            delete(result);
+                           // delete(result);  // Don`t delete it
                         }
                     } else {
                         isWaiting = true;

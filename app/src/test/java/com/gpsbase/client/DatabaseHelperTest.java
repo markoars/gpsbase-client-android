@@ -31,7 +31,7 @@ public class DatabaseHelperTest {
 
         assertNull(databaseHelper.selectPosition());
 
-        databaseHelper.insertPosition(position);
+        databaseHelper.insertPosition(position, 333, 444);
 
         position = databaseHelper.selectPosition();
 

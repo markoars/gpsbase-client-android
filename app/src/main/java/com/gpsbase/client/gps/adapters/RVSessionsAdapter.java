@@ -27,6 +27,7 @@ public class RVSessionsAdapter extends RecyclerView.Adapter<RVSessionsAdapter.Se
         TextView sessionDescription;
         TextView sessionStart;
         ImageView image;
+        Session session;
 
         SessionViewHolder(View itemView) {
             super(itemView);
@@ -50,8 +51,8 @@ public class RVSessionsAdapter extends RecyclerView.Adapter<RVSessionsAdapter.Se
                 @Override
                 public void onClick(View view) {
                     Intent i = new Intent (view.getContext(), SessionActivity.class);
-                    i.putExtra("clientName",clientName.getText().toString());
-                    i.putExtra("sessionDescription",sessionDescription.getText().toString());
+                    i.putExtra("sessionId", session.sessionId);
+                    i.putExtra("sessionDescription",session.sessionDescription);
                     view.getContext().startActivity(i);
                 }
             });
@@ -78,9 +79,11 @@ public class RVSessionsAdapter extends RecyclerView.Adapter<RVSessionsAdapter.Se
 
     @Override
     public void onBindViewHolder(SessionViewHolder sessionViewHolder, int i) {
-        sessionViewHolder.clientName.setText(sessions.get(i).clientName);
+        String sessionText = "#" + Integer.toString(sessions.get(i).sessionId);
+        sessionViewHolder.clientName.setText(sessionText);
         sessionViewHolder.sessionDescription.setText(sessions.get(i).sessionDescription);
         sessionViewHolder.sessionStart.setText(sessions.get(i).sessionStartString);
+        sessionViewHolder.session = sessions.get(i);
        // sessionViewHolder.personPhoto.setImageResource(persons.get(i).photoId);
 
     }

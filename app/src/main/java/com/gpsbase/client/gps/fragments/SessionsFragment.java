@@ -48,9 +48,9 @@ public class SessionsFragment extends Fragment {
 
     private void initializeData(){
         sessions = new ArrayList<>();
-        sessions.add(new Session("Tinex", "Аеродром, Лисиче, Центар", "понеделник, 02.03.2017 08:00", new Date(),  R.drawable.bg_circle));
-        sessions.add(new Session("КАМ", "Ѓорче, Влае", "среда, 02.03.2017 08:00", new Date(), R.drawable.bg_circle));
-        sessions.add(new Session("Bricolague", "Аеродром, Центар, Чаир, Бутел, Карпош 1", "петок, 02.03.2017 08:00", new Date(), R.drawable.bg_circle));
+        sessions.add(new Session(1, "Аеродром, Лисиче, Центар", "понеделник, 02.03.2017 08:00", new Date(),  R.drawable.bg_circle));
+        sessions.add(new Session(2, "Ѓорче, Влае", "среда, 02.03.2017 08:00", new Date(), R.drawable.bg_circle));
+        sessions.add(new Session(3, "Аеродром, Центар, Чаир, Бутел, Карпош 1", "петок, 02.03.2017 08:00", new Date(), R.drawable.bg_circle));
     }
 
     private void initializeAdapter(){

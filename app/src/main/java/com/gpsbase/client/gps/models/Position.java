@@ -18,6 +18,8 @@ package com.gpsbase.client.gps.models;
 import android.location.Location;
 import android.location.LocationManager;
 
+import org.osmdroid.util.GeoPoint;
+
 import java.util.Date;
 
 public class Position {
@@ -30,6 +32,7 @@ public class Position {
         time = new Date(location.getTime());
         latitude = location.getLatitude();
         longitude = location.getLongitude();
+        geoPoint = new GeoPoint(latitude, longitude);
         altitude = location.getAltitude();
         speed = location.getSpeed() * 1.943844; // speed in knots
         course = location.getBearing();
@@ -49,6 +52,7 @@ public class Position {
         this.id = id;
     }
 
+
     private String deviceId;
 
     public String getDeviceId() {
@@ -59,6 +63,26 @@ public class Position {
         this.deviceId = deviceId;
     }
 
+    private int customerId;
+
+    public int getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
+    }
+
+    private int sessionId;
+
+    public int getSessionId() {
+        return sessionId;
+    }
+
+    public void setSessionId(int customerId) {
+        this.sessionId = sessionId;
+    }
+
     private Date time;
 
     public Date getTime() {
@@ -67,6 +91,17 @@ public class Position {
 
     public void setTime(Date time) {
         this.time = time;
+    }
+
+
+    private GeoPoint geoPoint;
+
+    public GeoPoint getGeoPoint() {
+        return geoPoint;
+    }
+
+    public void setGeoPoint(GeoPoint geoPoint) {
+        this.geoPoint = geoPoint;
     }
 
     private double latitude;

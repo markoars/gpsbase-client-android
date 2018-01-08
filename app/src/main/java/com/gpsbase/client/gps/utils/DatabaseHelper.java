@@ -25,11 +25,15 @@ import android.os.AsyncTask;
 
 import com.gpsbase.client.gps.models.Position;
 
+import org.osmdroid.util.GeoPoint;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 7;
     public static final String DATABASE_NAME = "traccar.db";
 
     public interface DatabaseHandler<T> {
@@ -74,6 +78,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE position (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "customerId INTEGER," +
+                "sessionId INTEGER," +
                 "deviceId TEXT," +
                 "time INTEGER," +
                 "latitude REAL," +
@@ -91,8 +97,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void insertPosition(Position position) {
+    public void insertPosition(Position position, int _customerId, int _sessionId) {
         ContentValues values = new ContentValues();
+        values.put("customerId", _customerId);
+        values.put("sessionId", _sessionId);
         values.put("deviceId", position.getDeviceId());
         values.put("time", position.getTime().getTime());
         values.put("latitude", position.getLatitude());
@@ -106,11 +114,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.insertOrThrow("position", null, values);
     }
 
-    public void insertPositionAsync(final Position position, DatabaseHandler<Void> handler) {
+    public void insertPositionAsync(final Position position,final int _customerId,final int _sessionId, DatabaseHandler<Void> handler) {
         new DatabaseAsyncTask<Void>(handler) {
             @Override
             protected Void executeMethod() {
-                insertPosition(position);
+                insertPosition(position, _customerId, _sessionId);
                 return null;
             }
         }.execute();
@@ -144,6 +152,49 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         return position;
+    }
+
+
+    public ArrayList<Position> getLocationsForSession(int _customerId, int _sessionId) {
+        ArrayList<Position> positions = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM position WHERE SessionId =" + Integer.toString(_sessionId) + " ORDER BY id", null);
+        try {
+            if (cursor.getCount() > 0) {
+
+                while(cursor.moveToNext()) {
+
+                    Position position = new Position();
+
+                    position.setId(cursor.getLong(cursor.getColumnIndex("id")));
+                    position.setDeviceId(cursor.getString(cursor.getColumnIndex("deviceId")));
+                    position.setCustomerId(_customerId);
+                    position.setSessionId(_sessionId);
+                    position.setTime(new Date(cursor.getLong(cursor.getColumnIndex("time"))));
+                    position.setLatitude(cursor.getDouble(cursor.getColumnIndex("latitude")));
+                    position.setLongitude(cursor.getDouble(cursor.getColumnIndex("longitude")));
+                    position.setAltitude(cursor.getDouble(cursor.getColumnIndex("altitude")));
+                    position.setSpeed(cursor.getDouble(cursor.getColumnIndex("speed")));
+                    position.setCourse(cursor.getDouble(cursor.getColumnIndex("course")));
+                    position.setAccuracy(cursor.getDouble(cursor.getColumnIndex("accuracy")));
+                    position.setBattery(cursor.getDouble(cursor.getColumnIndex("battery")));
+
+                    double lat = position.getLatitude();
+                    double lon = position.getLongitude();
+                    GeoPoint geoPoint = new GeoPoint(lat, lon);
+                    position.setGeoPoint(geoPoint);
+
+                    positions.add(position);
+                }
+
+            } else {
+                return null;
+            }
+        } finally {
+            cursor.close();
+        }
+
+        return positions;
     }
 
     public void selectPositionAsync(DatabaseHandler<Position> handler) {

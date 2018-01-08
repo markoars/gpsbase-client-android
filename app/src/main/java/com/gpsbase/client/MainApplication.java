@@ -32,6 +32,15 @@ import com.gpsbase.client.gps.fragments.SettingsFragment;
 public class MainApplication extends Application {
 
     public static final String PRIMARY_CHANNEL = "default";
+    private int selectedSession;
+
+    public int getSelectedSession() {
+        return selectedSession;
+    }
+
+    public void setSelectedSession(int selectedSession) {
+        this.selectedSession = selectedSession;
+    }
 
     @Override
     public void onCreate() {

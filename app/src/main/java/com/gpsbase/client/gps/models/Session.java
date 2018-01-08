@@ -8,19 +8,19 @@ import java.util.Date;
  */
 
 public class Session {
-    public String clientName;
+    public int sessionId;
     public String sessionDescription;
     public Date sessionStart;
     public String sessionStartString;
     public int photoId;
 
-    public Session(String clientName,
+    public Session(int sessionId,
                    String sessionDescription,
                    String sessionStartString,
                    Date sessionStart,
                    int photoId) {
-        this.clientName = clientName;
         this.sessionDescription = sessionDescription;
+        this.sessionId = sessionId;
         this.sessionStart = getSampleDateTime().getTime();
         this.sessionStartString = sessionStartString;
         this.photoId = photoId;

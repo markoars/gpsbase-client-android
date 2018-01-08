@@ -18,13 +18,15 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
 
-            <!-- Test image for map -->
-            <ImageView
-                android:id="@+id/map"
-                android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:layout_gravity="center|top"
-                android:src="@drawable/maposm" />
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+                <org.osmdroid.views.MapView android:id="@+id/map_osm"
+                    android:layout_width="fill_parent"
+                    android:layout_height="150dp" />
+            </LinearLayout>
+
 
             <!-- Buttons and icons -->
             <TableLayout
@@ -116,6 +118,7 @@
                                 android:paddingBottom="10dp"
                                 android:paddingLeft="20dp"
                                 android:paddingRight="20dp"
+                            android:onClick=""
                                 />
 
                     </LinearLayout>
