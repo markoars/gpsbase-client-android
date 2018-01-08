@@ -36,7 +36,7 @@
                 android:layout_marginTop="20dp">
 
 
-                <!-- Session name row -->
+                <!-- Task name row -->
                 <TableRow>
 
                     <LinearLayout
@@ -53,8 +53,8 @@
                             android:layout_width="0dp"
                             android:layout_weight="1"
                             android:layout_height="wrap_content"
-                            android:id="@+id/activitySession_session_id"
-                            android:textSize="@dimen/session_client_name_textsize"
+                            android:id="@+id/activityTask_task_id"
+                            android:textSize="@dimen/task_client_name_textsize"
                             android:text="1111"
                             android:fontFamily="sans-serif"
                             android:textStyle="italic"
@@ -66,7 +66,7 @@
                     </LinearLayout>
                 </TableRow>
 
-                <!-- Session description row -->
+                <!-- Task description row -->
                 <TableRow>
 
                     <LinearLayout
@@ -82,8 +82,8 @@
                             android:layout_width="0dp"
                             android:layout_weight="1"
                             android:layout_height="wrap_content"
-                            android:id="@+id/activitySession_session_description"
-                            android:textSize="@dimen/session_client_description_textsize"
+                            android:id="@+id/activityTask_task_description"
+                            android:textSize="@dimen/task_client_description_textsize"
                             android:fontFamily="sans-serif"
                             android:textStyle="italic"
                             android:background="@null"
@@ -118,7 +118,6 @@
                                 android:paddingBottom="10dp"
                                 android:paddingLeft="20dp"
                                 android:paddingRight="20dp"
-                            android:onClick=""
                                 />
 
                     </LinearLayout>

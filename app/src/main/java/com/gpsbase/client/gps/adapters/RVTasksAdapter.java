@@ -1,0 +1,88 @@
+package com.gpsbase.client.gps.adapters;
+
+/**
+ * Created by Marko on 11/4/2017.
+ */
+
+import android.content.Intent;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import com.gpsbase.client.R;
+import com.gpsbase.client.gps.activities.TaskActivity;
+import com.gpsbase.client.gps.models.XTask;
+
+import java.util.List;
+
+public class RVTasksAdapter extends RecyclerView.Adapter<RVTasksAdapter.TaskViewHolder> {
+
+    public static class TaskViewHolder extends RecyclerView.ViewHolder {
+
+        CardView cardView;
+        TextView taskIdTxt;
+        TextView taskDescriptionTxt;
+        TextView taskStartTxt;
+        //ImageView image;
+        XTask task;
+
+        TaskViewHolder(View itemView) {
+            super(itemView);
+            cardView = itemView.findViewById(R.id.cv_task);
+            taskIdTxt = itemView.findViewById(R.id.cardTask_task_id);
+            taskDescriptionTxt = itemView.findViewById(R.id.cardTask_task_description);
+            taskStartTxt = itemView.findViewById(R.id.task_start);
+            //image = (ImageView)itemView.findViewById(R.id.person_photo);
+
+
+
+            cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent (view.getContext(), TaskActivity.class);
+                    i.putExtra("taskId", task.taskId);
+                    i.putExtra("taskDescription",task.taskDescription);
+                    view.getContext().startActivity(i);
+                }
+            });
+        }
+    }
+
+    List<XTask> tasks;
+
+    public RVTasksAdapter(List<XTask> tasks){
+        this.tasks = tasks;
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+    }
+
+    @Override
+    public TaskViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.card_task, viewGroup, false);
+        TaskViewHolder tvh = new TaskViewHolder(v);
+        return tvh;
+    }
+
+    @Override
+    public void onBindViewHolder(TaskViewHolder taskViewHolder, int i) {
+        String taskText = "#" + Integer.toString(tasks.get(i).taskId);
+        taskViewHolder.taskIdTxt.setText(taskText);
+        taskViewHolder.taskDescriptionTxt.setText(tasks.get(i).taskDescription);
+        taskViewHolder.taskStartTxt.setText(tasks.get(i).taskStartString);
+        taskViewHolder.task = tasks.get(i);
+       // taskViewHolder.personPhoto.setImageResource(persons.get(i).photoId);
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return tasks.size();
+    }
+
+
+}

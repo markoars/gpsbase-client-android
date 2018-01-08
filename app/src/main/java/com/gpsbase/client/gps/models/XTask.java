@@ -7,22 +7,22 @@ import java.util.Date;
  * Created by Marko on 11/4/2017.
  */
 
-public class Session {
-    public int sessionId;
-    public String sessionDescription;
-    public Date sessionStart;
-    public String sessionStartString;
+public class XTask {
+    public int taskId;
+    public String taskDescription;
+    public Date taskStart;
+    public String taskStartString;
     public int photoId;
 
-    public Session(int sessionId,
-                   String sessionDescription,
-                   String sessionStartString,
-                   Date sessionStart,
+    public XTask(int taskId,
+                   String taskDescription,
+                   String taskStartString,
+                   Date taskStart,
                    int photoId) {
-        this.sessionDescription = sessionDescription;
-        this.sessionId = sessionId;
-        this.sessionStart = getSampleDateTime().getTime();
-        this.sessionStartString = sessionStartString;
+        this.taskDescription = taskDescription;
+        this.taskId = taskId;
+        this.taskStart = getSampleDateTime().getTime();
+        this.taskStartString = taskStartString;
         this.photoId = photoId;
     }
 

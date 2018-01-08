@@ -1,15 +1,11 @@
 package com.gpsbase.client.gps.activities;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -28,7 +24,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import com.gpsbase.client.R;
 import com.gpsbase.client.gps.fragments.HomeFragment;
-import com.gpsbase.client.gps.fragments.SessionsFragment;
 import com.gpsbase.client.gps.fragments.TabFragment;
 import com.gpsbase.client.gps.other.CircleTransform;
 
@@ -52,11 +47,11 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
     public static int navItemIndex = 0;
 
     // tags used to attach the fragments
-    private static final String TAG_SESSIONS = "sessions";
+    private static final String TAG_TASKS = "tasks";
     private static final String TAG_HOME = "photos";
     private static final String TAG_NOTIFICATIONS = "notifications";
     private static final String TAG_SETTINGS = "settings";
-    public static String CURRENT_TAG = TAG_SESSIONS;
+    public static String CURRENT_TAG = TAG_TASKS;
 
     // toolbar titles respected to selected nav menu item
     private String[] activityTitles;
@@ -108,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
 
         if (savedInstanceState == null) {
             navItemIndex = 0;
-            CURRENT_TAG = TAG_SESSIONS;
+            CURRENT_TAG = TAG_TASKS;
             loadHomeFragment();
         }
     }
@@ -247,9 +242,9 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
                 //Check to see which item was being clicked and perform appropriate action
                 switch (menuItem.getItemId()) {
                     //Replacing the main content with ContentFragment Which is our Inbox View;
-                    case R.id.nav_sessions:
+                    case R.id.nav_tasks:
                         navItemIndex = 0;
-                        CURRENT_TAG = TAG_SESSIONS;
+                        CURRENT_TAG = TAG_TASKS;
                         break;
                   /*  case R.id.nav_home:
                         navItemIndex = 1;
@@ -328,7 +323,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
             // rather than home
             if (navItemIndex != 0) {
                 navItemIndex = 0;
-                CURRENT_TAG = TAG_SESSIONS;
+                CURRENT_TAG = TAG_TASKS;
                 loadHomeFragment();
                 return;
             }

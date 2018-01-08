@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardUseCompatPadding="true"
-        android:id="@+id/cv_session"
+        android:id="@+id/cv_task"
         >
 
         <RelativeLayout
@@ -36,7 +36,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/cardSession_session_id"
+                android:id="@+id/cardTask_task_id"
                 android:layout_alignParentTop="true"
                 android:textSize="30sp"
                 />
@@ -44,16 +44,16 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/cardSession_session_description"
-                android:layout_below="@+id/cardSession_session_id"
+                android:id="@+id/cardTask_task_description"
+                android:layout_below="@+id/cardTask_task_id"
                 android:paddingTop="2dp"
                 />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/session_start"
-                android:layout_below="@+id/cardSession_session_description"
+                android:id="@+id/task_start"
+                android:layout_below="@+id/cardTask_task_description"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:paddingTop="2dp"

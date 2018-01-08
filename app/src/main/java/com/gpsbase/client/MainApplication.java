@@ -32,14 +32,14 @@ import com.gpsbase.client.gps.fragments.SettingsFragment;
 public class MainApplication extends Application {
 
     public static final String PRIMARY_CHANNEL = "default";
-    private int selectedSession;
+    private int selectedTaskId;
 
-    public int getSelectedSession() {
-        return selectedSession;
+    public int getSelectedTaskId() {
+        return selectedTaskId;
     }
 
-    public void setSelectedSession(int selectedSession) {
-        this.selectedSession = selectedSession;
+    public void setSelectedTaskId(int selectedTaskId) {
+        this.selectedTaskId = selectedTaskId;
     }
 
     @Override

@@ -63,24 +63,14 @@ public class Position {
         this.deviceId = deviceId;
     }
 
-    private int customerId;
+    private int taskId;
 
-    public int getCustomerId() {
-        return customerId;
+    public int getTaskId() {
+        return taskId;
     }
 
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
-    }
-
-    private int sessionId;
-
-    public int getSessionId() {
-        return sessionId;
-    }
-
-    public void setSessionId(int customerId) {
-        this.sessionId = sessionId;
+    public void setTaskId(int taskId) {
+        this.taskId = taskId;
     }
 
     private Date time;

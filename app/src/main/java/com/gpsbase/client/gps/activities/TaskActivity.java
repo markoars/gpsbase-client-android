@@ -1,24 +1,12 @@
 package com.gpsbase.client.gps.activities;
 
-import android.Manifest;
-import android.app.AlarmManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
-import android.preference.TwoStatePreference;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
-import android.support.v7.widget.CardView;
-import android.view.View;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -26,7 +14,6 @@ import android.widget.ToggleButton;
 import com.gpsbase.client.MainApplication;
 import com.gpsbase.client.R;
 import com.gpsbase.client.gps.models.Position;
-import com.gpsbase.client.gps.services.TrackingService;
 import com.gpsbase.client.gps.utils.DatabaseHelper;
 
 import org.osmdroid.api.IMapController;
@@ -35,32 +22,19 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
-import org.osmdroid.views.overlay.OverlayItem;
-import org.osmdroid.views.overlay.Polygon;
 import org.osmdroid.views.overlay.Polyline;
-import org.osmdroid.views.overlay.infowindow.BasicInfoWindow;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
-import static com.gpsbase.client.gps.fragments.SettingsFragment.KEY_ANGLE;
-import static com.gpsbase.client.gps.fragments.SettingsFragment.KEY_DEVICE;
-import static com.gpsbase.client.gps.fragments.SettingsFragment.KEY_DISTANCE;
-import static com.gpsbase.client.gps.fragments.SettingsFragment.KEY_INTERVAL;
-import static com.gpsbase.client.gps.fragments.SettingsFragment.KEY_PROVIDER;
-import static com.gpsbase.client.gps.fragments.SettingsFragment.KEY_STATUS;
-import static com.gpsbase.client.gps.fragments.SettingsFragment.KEY_URL;
 
 /**
  * Created by Marko on 11/5/2017.
  */
 
-public class SessionActivity extends AppCompatActivity {
+public class TaskActivity extends AppCompatActivity {
 
-    private TextView sessionIdTxt;
-    private TextView sessionDescriptionTxt;
+    private TextView taskIdTxt;
+    private TextView taskDescriptionTxt;
     private MapView map;
     private ArrayList<GeoPoint> points;
     private DatabaseHelper databaseHelper;
@@ -68,9 +42,9 @@ public class SessionActivity extends AppCompatActivity {
 
     ToggleButton startTrackingToggle;
 
-    private String sessionIdString;
-    private String sessionDescr;
-    private int sessionId;
+    private String taskIdString;
+    private String taskDescr;
+    private int taskId;
 
 
     private static final int PERMISSIONS_REQUEST_LOCATION = 2;
@@ -82,19 +56,19 @@ public class SessionActivity extends AppCompatActivity {
         //important! set your user agent to prevent getting banned from the osm servers
         Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
 
-        setContentView(R.layout.activity_session);
+        setContentView(R.layout.activity_task);
 
-        sessionIdString = Integer.toString(getIntent().getIntExtra("sessionId", 0));
-        sessionDescr = getIntent().getStringExtra("sessionDescription");
-        sessionId = getIntent().getIntExtra("sessionId", 0);
+        taskIdString = Integer.toString(getIntent().getIntExtra("taskId", 0));
+        taskDescr = getIntent().getStringExtra("taskDescription");
+        taskId = getIntent().getIntExtra("taskId", 0);
 
         points = new ArrayList<>();
         databaseHelper = new DatabaseHelper(this);
-        sessionIdTxt = findViewById(R.id.activitySession_session_id);
-        sessionDescriptionTxt = findViewById(R.id.activitySession_session_description);
-        sessionIdTxt.setText(sessionIdString);
-        sessionDescriptionTxt.setText(sessionDescr);
-        this.setTitle(sessionIdString + " - " + sessionDescr); // Set action bar title
+        taskIdTxt = findViewById(R.id.activityTask_task_id);
+        taskDescriptionTxt = findViewById(R.id.activityTask_task_description);
+        taskIdTxt.setText(taskIdString);
+        taskDescriptionTxt.setText(taskDescr);
+        this.setTitle(taskIdString + " - " + taskDescr); // Set action bar title
 
         map = findViewById(R.id.map_osm);
         map.setTileSource(TileSourceFactory.MAPNIK);
@@ -117,7 +91,7 @@ public class SessionActivity extends AppCompatActivity {
 
                 if(isChecked) {
                     // start tracking service
-                    ((MainApplication) SessionActivity.this.getApplication()).setSelectedSession(sessionId);
+                    ((MainApplication) TaskActivity.this.getApplication()).setSelectedTaskId(taskId);
                 }
                 else {
                     // stop tracking service
@@ -180,7 +154,7 @@ public class SessionActivity extends AppCompatActivity {
 
     private void redrawPolyLines(){
 
-        List<Position> positions = databaseHelper.getLocationsForSession(sessionId);
+        List<Position> positions = databaseHelper.getLocationsByTaskId(taskId);
 
         if(positions != null) {
             points = new ArrayList<>(); // clear list

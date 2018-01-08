@@ -64,8 +64,8 @@ public class TabFragment extends Fragment {
         public Fragment getItem(int position)
         {
             switch (position){
-                case 0 : return new SessionsFragment();
-                case 1 : return new SessionsFragment();
+                case 0 : return new TasksFragment();
+                case 1 : return new TasksFragment();
             }
             return null;
         }

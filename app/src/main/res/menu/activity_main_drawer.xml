@@ -3,8 +3,8 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_sessions"
-            android:title="@string/nav_sessions" />
+            android:id="@+id/nav_tasks"
+            android:title="@string/nav_tasks" />
 
     </group>
 

@@ -52,7 +52,7 @@
     <string name="closeDrawer">close_drawer</string>
 
     <!-- Navigation Drawer menu labels -->
-    <string name="nav_sessions">Sessions</string>
+    <string name="nav_tasks">Tasks</string>
     <string name="nav_home">Home</string>
     <string name="nav_notifications">Notifications</string>
     <string name="nav_settings">Settings</string>
@@ -60,7 +60,7 @@
 
     <!-- Toolbar titles when navigation menu item is selected -->
     <string-array name="nav_item_activity_titles">
-        <item>Sessions</item>
+        <item>Tasks</item>
         <item>Home</item>
         <item>Notifications</item>
         <item>Settings</item>
@@ -76,7 +76,7 @@
     <string name="title_activity_main">MainActivity</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="sessions">Sessions</string>
+    <string name="tasks">Tasks</string>
     <string name="title_activity_about_us">AboutUsActivity</string>
     <string name="title_activity_privacy_policy">PrivacyPolicyActivity</string>
     <string name="title_activity_test">TestActivity</string>
