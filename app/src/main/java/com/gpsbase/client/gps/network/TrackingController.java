@@ -45,7 +45,6 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
 
     private String url;
     private int selectedSessionId;
-    private String customerId;
 
     private PositionProvider positionProvider;
     private DatabaseHelper databaseHelper;
@@ -158,7 +157,7 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
         selectedSessionId = ((MainApplication) context.getApplicationContext()).getSelectedSession();
 
 
-        databaseHelper.insertPositionAsync(position, 111, selectedSessionId, new DatabaseHelper.DatabaseHandler<Void>() {
+        databaseHelper.insertPositionAsync(position, selectedSessionId, new DatabaseHelper.DatabaseHandler<Void>() {
             @Override
             public void onComplete(boolean success, Void result) {
                 if (success) {

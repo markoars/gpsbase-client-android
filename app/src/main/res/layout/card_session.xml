@@ -36,26 +36,24 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/client_name"
+                android:id="@+id/cardSession_session_id"
                 android:layout_alignParentTop="true"
                 android:textSize="30sp"
                 />
-            <!-- android:layout_toRightOf="@+id/person_photo" -->
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/session_description"
-                android:layout_below="@+id/client_name"
+                android:id="@+id/cardSession_session_description"
+                android:layout_below="@+id/cardSession_session_id"
                 android:paddingTop="2dp"
                 />
-            <!-- android:layout_toRightOf="@+id/person_photo" -->
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/session_start"
-                android:layout_below="@+id/session_description"
+                android:layout_below="@+id/cardSession_session_description"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:paddingTop="2dp"

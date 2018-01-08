@@ -23,29 +23,21 @@ public class RVSessionsAdapter extends RecyclerView.Adapter<RVSessionsAdapter.Se
     public static class SessionViewHolder extends RecyclerView.ViewHolder {
 
         CardView cardView;
-        TextView clientName;
-        TextView sessionDescription;
-        TextView sessionStart;
-        ImageView image;
+        TextView sessionIdTxt;
+        TextView sessionDescriptionTxt;
+        TextView sessionStartTxt;
+        //ImageView image;
         Session session;
 
         SessionViewHolder(View itemView) {
             super(itemView);
-            cardView = (CardView)itemView.findViewById(R.id.cv_session);
-            clientName = (TextView)itemView.findViewById(R.id.client_name);
-            sessionDescription = (TextView)itemView.findViewById(R.id.session_description);
-            sessionStart = itemView.findViewById(R.id.session_start);
+            cardView = itemView.findViewById(R.id.cv_session);
+            sessionIdTxt = itemView.findViewById(R.id.cardSession_session_id);
+            sessionDescriptionTxt = itemView.findViewById(R.id.cardSession_session_description);
+            sessionStartTxt = itemView.findViewById(R.id.session_start);
             //image = (ImageView)itemView.findViewById(R.id.person_photo);
 
-            /*itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
 
-                    Intent intent = new Intent(v.getContext(), SessionActivity.class);
-                    v.getContext().startActivity(intent);
-                    //Toast.makeText(v.getContext(), "os version is: " + feed.getTitle(), Toast.LENGTH_SHORT).show();
-                }
-            });*/
 
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -80,9 +72,9 @@ public class RVSessionsAdapter extends RecyclerView.Adapter<RVSessionsAdapter.Se
     @Override
     public void onBindViewHolder(SessionViewHolder sessionViewHolder, int i) {
         String sessionText = "#" + Integer.toString(sessions.get(i).sessionId);
-        sessionViewHolder.clientName.setText(sessionText);
-        sessionViewHolder.sessionDescription.setText(sessions.get(i).sessionDescription);
-        sessionViewHolder.sessionStart.setText(sessions.get(i).sessionStartString);
+        sessionViewHolder.sessionIdTxt.setText(sessionText);
+        sessionViewHolder.sessionDescriptionTxt.setText(sessions.get(i).sessionDescription);
+        sessionViewHolder.sessionStartTxt.setText(sessions.get(i).sessionStartString);
         sessionViewHolder.session = sessions.get(i);
        // sessionViewHolder.personPhoto.setImageResource(persons.get(i).photoId);
 

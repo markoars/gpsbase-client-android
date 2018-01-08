@@ -59,8 +59,8 @@ import static com.gpsbase.client.gps.fragments.SettingsFragment.KEY_URL;
 
 public class SessionActivity extends AppCompatActivity {
 
-    private TextView clientNameTxt;
-    private TextView clientDescriptionTxt;
+    private TextView sessionIdTxt;
+    private TextView sessionDescriptionTxt;
     private MapView map;
     private ArrayList<GeoPoint> points;
     private DatabaseHelper databaseHelper;
@@ -68,7 +68,7 @@ public class SessionActivity extends AppCompatActivity {
 
     ToggleButton startTrackingToggle;
 
-    private String clientName;
+    private String sessionIdString;
     private String sessionDescr;
     private int sessionId;
 
@@ -84,17 +84,17 @@ public class SessionActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_session);
 
-        clientName = Integer.toString(getIntent().getIntExtra("sessionId", 0));
+        sessionIdString = Integer.toString(getIntent().getIntExtra("sessionId", 0));
         sessionDescr = getIntent().getStringExtra("sessionDescription");
         sessionId = getIntent().getIntExtra("sessionId", 0);
 
         points = new ArrayList<>();
         databaseHelper = new DatabaseHelper(this);
-        clientNameTxt = findViewById(R.id.session_client_name);
-        clientDescriptionTxt = findViewById(R.id.session_client_description);
-        clientNameTxt.setText(clientName);
-        clientDescriptionTxt.setText(sessionDescr);
-        this.setTitle(clientName + " - " + sessionDescr); // Set action bar title
+        sessionIdTxt = findViewById(R.id.activitySession_session_id);
+        sessionDescriptionTxt = findViewById(R.id.activitySession_session_description);
+        sessionIdTxt.setText(sessionIdString);
+        sessionDescriptionTxt.setText(sessionDescr);
+        this.setTitle(sessionIdString + " - " + sessionDescr); // Set action bar title
 
         map = findViewById(R.id.map_osm);
         map.setTileSource(TileSourceFactory.MAPNIK);
@@ -180,7 +180,7 @@ public class SessionActivity extends AppCompatActivity {
 
     private void redrawPolyLines(){
 
-        List<Position> positions = databaseHelper.getLocationsForSession(111,sessionId);
+        List<Position> positions = databaseHelper.getLocationsForSession(sessionId);
 
         if(positions != null) {
             points = new ArrayList<>(); // clear list

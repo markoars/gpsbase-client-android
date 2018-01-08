@@ -33,7 +33,7 @@ import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION = 7;
+    public static final int DATABASE_VERSION = 8;
     public static final String DATABASE_NAME = "traccar.db";
 
     public interface DatabaseHandler<T> {
@@ -78,7 +78,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE position (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "customerId INTEGER," +
                 "sessionId INTEGER," +
                 "deviceId TEXT," +
                 "time INTEGER," +
@@ -97,9 +96,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void insertPosition(Position position, int _customerId, int _sessionId) {
+    public void insertPosition(Position position, int _sessionId) {
         ContentValues values = new ContentValues();
-        values.put("customerId", _customerId);
         values.put("sessionId", _sessionId);
         values.put("deviceId", position.getDeviceId());
         values.put("time", position.getTime().getTime());
@@ -114,11 +112,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.insertOrThrow("position", null, values);
     }
 
-    public void insertPositionAsync(final Position position,final int _customerId,final int _sessionId, DatabaseHandler<Void> handler) {
+    public void insertPositionAsync(final Position position, final int _sessionId, DatabaseHandler<Void> handler) {
         new DatabaseAsyncTask<Void>(handler) {
             @Override
             protected Void executeMethod() {
-                insertPosition(position, _customerId, _sessionId);
+                insertPosition(position, _sessionId);
                 return null;
             }
         }.execute();
@@ -155,7 +153,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public ArrayList<Position> getLocationsForSession(int _customerId, int _sessionId) {
+    public ArrayList<Position> getLocationsForSession(int _sessionId) {
         ArrayList<Position> positions = new ArrayList<>();
 
         Cursor cursor = db.rawQuery("SELECT * FROM position WHERE SessionId =" + Integer.toString(_sessionId) + " ORDER BY id", null);
@@ -168,7 +166,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
                     position.setId(cursor.getLong(cursor.getColumnIndex("id")));
                     position.setDeviceId(cursor.getString(cursor.getColumnIndex("deviceId")));
-                    position.setCustomerId(_customerId);
                     position.setSessionId(_sessionId);
                     position.setTime(new Date(cursor.getLong(cursor.getColumnIndex("time"))));
                     position.setLatitude(cursor.getDouble(cursor.getColumnIndex("latitude")));
