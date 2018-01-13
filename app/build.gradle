@@ -17,6 +17,8 @@ android {
         checkReleaseBuilds false
     }
 
+    flavorDimensions "default"
+
     productFlavors {
         regular
         google
