@@ -32,14 +32,14 @@ import com.gpsbase.client.gps.fragments.SettingsFragment;
 public class MainApplication extends Application {
 
     public static final String PRIMARY_CHANNEL = "default";
-    private int selectedTaskId;
+    private int currentTrackingTaskId = 0; // 0 means none is selected
 
-    public int getSelectedTaskId() {
-        return selectedTaskId;
+    public int getCurrentTrackingTaskId() {
+        return currentTrackingTaskId;
     }
 
-    public void setSelectedTaskId(int selectedTaskId) {
-        this.selectedTaskId = selectedTaskId;
+    public void setCurrentTrackingTaskId(int _currentTrackingTaskId) {
+        this.currentTrackingTaskId = _currentTrackingTaskId;
     }
 
     @Override
@@ -48,9 +48,6 @@ public class MainApplication extends Application {
         System.setProperty("http.keepAliveDuration", String.valueOf(30 * 60 * 1000));
 
         migrateLegacyPreferences(PreferenceManager.getDefaultSharedPreferences(this));
-        // test
-        // test
-        //test 3
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

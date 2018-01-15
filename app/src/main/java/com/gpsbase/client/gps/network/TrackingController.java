@@ -44,7 +44,7 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
     private SharedPreferences preferences;
 
     private String url;
-    private int selectedTaskId;
+    private int currentTrackingTaskId;
 
     private PositionProvider positionProvider;
     private DatabaseHelper databaseHelper;
@@ -154,10 +154,10 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
         lock();
 
 
-        selectedTaskId = ((MainApplication) context.getApplicationContext()).getSelectedTaskId();
+        currentTrackingTaskId = ((MainApplication) context.getApplicationContext()).getCurrentTrackingTaskId();
 
 
-        databaseHelper.insertPositionAsync(position, selectedTaskId, new DatabaseHelper.DatabaseHandler<Void>() {
+        databaseHelper.insertPositionAsync(position, currentTrackingTaskId, new DatabaseHelper.DatabaseHandler<Void>() {
             @Override
             public void onComplete(boolean success, Void result) {
                 if (success) {

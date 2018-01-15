@@ -70,7 +70,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
     public static final String KEY_PROVIDER = "provider";
     public static final String KEY_STATUS = "status";
 
-    private static final int PERMISSIONS_REQUEST_LOCATION = 2;
+    public static final int PERMISSIONS_REQUEST_LOCATION = 2;
 
     private SharedPreferences sharedPreferences;
 

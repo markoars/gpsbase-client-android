@@ -1,9 +1,12 @@
 package com.gpsbase.client.gps.activities;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
@@ -15,6 +18,7 @@ import com.gpsbase.client.MainApplication;
 import com.gpsbase.client.R;
 import com.gpsbase.client.gps.models.Position;
 import com.gpsbase.client.gps.utils.DatabaseHelper;
+import com.gpsbase.client.gps.utils.TrackingServiceUtil;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
@@ -26,6 +30,7 @@ import org.osmdroid.views.overlay.Polyline;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * Created by Marko on 11/5/2017.
@@ -48,6 +53,9 @@ public class TaskActivity extends AppCompatActivity {
 
 
     private static final int PERMISSIONS_REQUEST_LOCATION = 2;
+    public static final String KEY_STATUS = "status";
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,22 +91,40 @@ public class TaskActivity extends AppCompatActivity {
 
 
 
-
         startTrackingToggle = findViewById(R.id.buttonOnOff);
+
+        if(((MainApplication) TaskActivity.this.getApplication()).getCurrentTrackingTaskId() == taskId) {
+            startTrackingToggle.setChecked(true);
+        }
+
         startTrackingToggle.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton toggleButton, boolean isChecked) {
 
+                TrackingServiceUtil trackingUtil = new TrackingServiceUtil(TaskActivity.this);
+
                 if(isChecked) {
                     // start tracking service
-                    ((MainApplication) TaskActivity.this.getApplication()).setSelectedTaskId(taskId);
+                    if(((MainApplication) TaskActivity.this.getApplication()).getCurrentTrackingTaskId() == 0) {
+
+                        ((MainApplication) TaskActivity.this.getApplication()).setCurrentTrackingTaskId(taskId);
+                        boolean trackingStatus = trackingUtil.startTrackingService(true, true);
+                        toggleButton.setChecked(trackingStatus);
+                        toggleButton.setBackgroundColor(getResources().getColor(R.color.primary));
+                    }
+                    else {
+                        // Tracking is ON, so just change the current selected task Id
+                        ((MainApplication) TaskActivity.this.getApplication()).setCurrentTrackingTaskId(taskId);
+                    }
                 }
                 else {
                     // stop tracking service
+                    ((MainApplication) TaskActivity.this.getApplication()).setCurrentTrackingTaskId(0); // set none is selected
+                    trackingUtil.stopTrackingService();
+                    toggleButton.setBackgroundColor(getResources().getColor(R.color.blue));
                 }
             }
         }) ;
-
 
 
         redrawPolyLines();
