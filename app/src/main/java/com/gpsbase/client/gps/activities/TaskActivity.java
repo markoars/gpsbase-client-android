@@ -10,6 +10,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
+import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -53,7 +55,8 @@ public class TaskActivity extends AppCompatActivity {
     private DatabaseHelper databaseHelper;
     private BroadcastReceiver brLocationUpdates;
 
-    ToggleButton startTrackingToggle;
+    private ToggleButton tbtnStartTrackingToggle;
+    private Button btnDeleteRecords;
 
     private String taskIdString;
     private String taskDescr;
@@ -110,19 +113,19 @@ public class TaskActivity extends AppCompatActivity {
 
 
 
-        startTrackingToggle = findViewById(R.id.buttonOnOff);
-
+        tbtnStartTrackingToggle = findViewById(R.id.buttonOnOff);
+        btnDeleteRecords = findViewById(R.id.buttonDeleteRecords);
 
 
         if(currentTrackingTaskId == taskId) {
-            startTrackingToggle.setChecked(true);
-            startTrackingToggle.setBackgroundColor(getResources().getColor(R.color.primary));
+            tbtnStartTrackingToggle.setChecked(true);
+            tbtnStartTrackingToggle.setBackgroundColor(getResources().getColor(R.color.primary));
         }
         else {
-            startTrackingToggle.setBackgroundColor(getResources().getColor(R.color.blue));
+            tbtnStartTrackingToggle.setBackgroundColor(getResources().getColor(R.color.blue));
         }
 
-        startTrackingToggle.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener() {
+        tbtnStartTrackingToggle.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton toggleButton, boolean isChecked) {
 
@@ -150,6 +153,25 @@ public class TaskActivity extends AppCompatActivity {
                 }
             }
         }) ;
+
+
+        btnDeleteRecords.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                databaseHelper.deletePositionAsync(taskId, new DatabaseHelper.DatabaseHandler<Void>() {
+                    @Override
+                    public void onComplete(boolean success, Void result) {
+                        if (success) {
+                        } else {
+                        }
+                    }
+                });
+                map.getOverlayManager().clear();
+            }
+        });
+
+
 
 
         redrawPolyLines();

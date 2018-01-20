@@ -219,4 +219,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }.execute();
     }
 
+    public void deletePositionByTaskIdAsync(final long id, DatabaseHandler<Void> handler) {
+        new DatabaseAsyncTask<Void>(handler) {
+            @Override
+            protected Void executeMethod() {
+                deletePositionByTaskId(id);
+                return null;
+            }
+        }.execute();
+    }
+
+    public void deletePositionByTaskId(long id) {
+        if (db.delete("position", "taskId = ?", new String[] { String.valueOf(id) }) != 1) {
+            throw new SQLException();
+        }
+    }
+
 }

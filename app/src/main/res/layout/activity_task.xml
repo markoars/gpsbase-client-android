@@ -284,7 +284,7 @@
                 </TableRow>
 
 
-                <!-- Camera button row -->
+                <!-- Delete records by task id button row -->
                 <TableRow>
                     <LinearLayout
                         android:gravity="center"
@@ -292,11 +292,11 @@
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content">
 
-                        <Button android:id="@+id/buttonCamera"
+                        <Button android:id="@+id/buttonDeleteRecords"
                             android:layout_width="wrap_content"
                             android:width="240dp"
                             android:layout_height="wrap_content"
-                            android:text="Camera"
+                            android:text="Delete records"
                             android:textColor="@android:color/white"
                             android:background="@color/orange"
                             android:textSize="18sp"
