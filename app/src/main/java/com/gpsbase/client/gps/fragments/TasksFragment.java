@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import com.gpsbase.client.R;
 import com.gpsbase.client.gps.models.XTask;
 import com.gpsbase.client.gps.adapters.RVTasksAdapter;
+import com.gpsbase.client.gps.utils.NetworkUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,17 +23,16 @@ public class TasksFragment extends Fragment {
 
     private List<XTask> tasks;
     private RecyclerView rv;
+    NetworkUtil networkUtil;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-       // return inflater.inflate(R.layout.recycler_view_tasks,null);
+        View view = inflater.inflate(R.layout.recycler_view_tasks,null);
 
-
-        View view =  inflater.inflate(R.layout.recycler_view_tasks,null);
-
-        rv=(RecyclerView)view.findViewById(R.id.rvTasks);
+        rv = view.findViewById(R.id.rvTasks);
+        networkUtil = new NetworkUtil();
 
 
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
@@ -47,11 +47,9 @@ public class TasksFragment extends Fragment {
 
 
     private void initializeData(){
-        tasks = new ArrayList<>();
-        tasks.add(new XTask(1, "Аеродром, Лисиче, Центар", "понеделник, 02.03.2017 08:00", new Date(),  R.drawable.bg_circle));
-        tasks.add(new XTask(2, "Ѓорче, Влае", "среда, 02.03.2017 08:00", new Date(), R.drawable.bg_circle));
-        tasks.add(new XTask(3, "Аеродром, Центар, Чаир, Бутел, Карпош 1", "петок, 02.03.2017 08:00", new Date(), R.drawable.bg_circle));
-    }
+
+        tasks = networkUtil.getPendingTasks();
+     }
 
     private void initializeAdapter(){
         RVTasksAdapter adapter = new RVTasksAdapter(tasks);
