@@ -4,6 +4,7 @@ package com.gpsbase.client.gps.adapters;
  * Created by Marko on 11/4/2017.
  */
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -11,10 +12,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.gpsbase.client.MainApplication;
 import com.gpsbase.client.R;
 import com.gpsbase.client.gps.activities.TaskActivity;
 import com.gpsbase.client.gps.models.XTask;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RVTasksAdapter extends RecyclerView.Adapter<RVTasksAdapter.TaskViewHolder> {
@@ -22,20 +26,23 @@ public class RVTasksAdapter extends RecyclerView.Adapter<RVTasksAdapter.TaskView
     public static class TaskViewHolder extends RecyclerView.ViewHolder {
 
         CardView cardView;
-        TextView taskIdTxt;
-        TextView taskDescriptionTxt;
-        TextView taskStartTxt;
+        TextView txtTaskId;
+        TextView txtTaskDescription;
+        TextView txtTaskStart;
+        TextView txtTaskStatus;
         //ImageView image;
         XTask task;
 
         TaskViewHolder(View itemView) {
             super(itemView);
             cardView = itemView.findViewById(R.id.cv_task);
-            taskIdTxt = itemView.findViewById(R.id.cardTask_task_id);
-            taskDescriptionTxt = itemView.findViewById(R.id.cardTask_task_description);
-            taskStartTxt = itemView.findViewById(R.id.task_start);
-            //image = (ImageView)itemView.findViewById(R.id.person_photo);
+            txtTaskId = itemView.findViewById(R.id.cardTask_task_id);
+            txtTaskDescription = itemView.findViewById(R.id.cardTask_task_description);
+            txtTaskStart = itemView.findViewById(R.id.task_start);
+            txtTaskStatus = itemView.findViewById(R.id.card_task_task_status);
 
+
+            //image = (ImageView)itemView.findViewById(R.id.person_photo);
 
 
             cardView.setOnClickListener(new View.OnClickListener() {
@@ -51,9 +58,11 @@ public class RVTasksAdapter extends RecyclerView.Adapter<RVTasksAdapter.TaskView
     }
 
     List<XTask> tasks;
+    Context context;
 
-    public RVTasksAdapter(List<XTask> tasks){
+    public RVTasksAdapter(List<XTask> tasks, Context context){
         this.tasks = tasks;
+        this.context = context;
     }
 
     @Override
@@ -71,12 +80,22 @@ public class RVTasksAdapter extends RecyclerView.Adapter<RVTasksAdapter.TaskView
     @Override
     public void onBindViewHolder(TaskViewHolder taskViewHolder, int i) {
         String taskText = "#" + Integer.toString(tasks.get(i).taskId);
-        taskViewHolder.taskIdTxt.setText(taskText);
-        taskViewHolder.taskDescriptionTxt.setText(tasks.get(i).taskDescription);
-        taskViewHolder.taskStartTxt.setText(tasks.get(i).taskStartString);
+        taskViewHolder.txtTaskId.setText(taskText);
+        taskViewHolder.txtTaskDescription.setText(tasks.get(i).taskDescription);
+        taskViewHolder.txtTaskStart.setText(tasks.get(i).taskStartString);
         taskViewHolder.task = tasks.get(i);
-       // taskViewHolder.personPhoto.setImageResource(persons.get(i).photoId);
 
+        int currentTrackingTaskId = ((MainApplication) context.getApplicationContext()).getCurrentTrackingTaskId();
+
+        if(context != null) {
+            if (currentTrackingTaskId == tasks.get(i).taskId) {
+                taskViewHolder.txtTaskStatus.setVisibility(View.VISIBLE);
+            }
+            else {
+                taskViewHolder.txtTaskStatus.setVisibility(View.GONE);
+            }
+        }
+       // taskViewHolder.personPhoto.setImageResource(persons.get(i).photoId);
     }
 
     @Override
@@ -84,5 +103,10 @@ public class RVTasksAdapter extends RecyclerView.Adapter<RVTasksAdapter.TaskView
         return tasks.size();
     }
 
+
+
+    public void rebindData(){
+        notifyDataSetChanged();
+    }
 
 }

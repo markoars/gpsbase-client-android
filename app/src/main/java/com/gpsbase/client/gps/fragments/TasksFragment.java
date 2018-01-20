@@ -23,6 +23,7 @@ public class TasksFragment extends Fragment {
 
     private List<XTask> tasks;
     private RecyclerView rv;
+    private RVTasksAdapter adapter;
     NetworkUtil networkUtil;
 
     @Nullable
@@ -47,13 +48,20 @@ public class TasksFragment extends Fragment {
 
 
     private void initializeData(){
-
         tasks = networkUtil.getPendingTasks();
      }
 
     private void initializeAdapter(){
-        RVTasksAdapter adapter = new RVTasksAdapter(tasks);
+        adapter = new RVTasksAdapter(tasks, this.getContext());
         rv.setAdapter(adapter);
+    }
+
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        adapter.rebindData();
     }
 }
 

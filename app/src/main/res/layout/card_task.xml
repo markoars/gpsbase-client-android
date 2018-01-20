@@ -37,8 +37,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/cardTask_task_id"
-                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
                 android:textSize="30sp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:id="@+id/card_task_task_status"
+                android:text="@string/task_status_active"
+                android:textColor="@color/primary"
+                android:textSize="20sp"
+                android:paddingTop="5sp"
                 />
 
             <TextView
@@ -58,6 +69,7 @@
                 android:textStyle="bold"
                 android:paddingTop="2dp"
                 />
+
 
 
         </RelativeLayout>
