@@ -40,6 +40,14 @@ public class TaskActivity extends AppCompatActivity {
 
     private TextView taskIdTxt;
     private TextView taskDescriptionTxt;
+    private TextView txtSatelliteCount;
+    private TextView txtAccuracy;
+    private TextView txtDistance;
+    private TextView txtPoints;
+    private TextView txtDuration;
+    private TextView txtSpeed;
+
+
     private MapView map;
     private ArrayList<GeoPoint> points;
     private DatabaseHelper databaseHelper;
@@ -50,6 +58,7 @@ public class TaskActivity extends AppCompatActivity {
     private String taskIdString;
     private String taskDescr;
     private int taskId;
+    private int currentTrackingTaskId;
 
 
     private static final int PERMISSIONS_REQUEST_LOCATION = 2;
@@ -69,6 +78,7 @@ public class TaskActivity extends AppCompatActivity {
         taskIdString = Integer.toString(getIntent().getIntExtra("taskId", 0));
         taskDescr = getIntent().getStringExtra("taskDescription");
         taskId = getIntent().getIntExtra("taskId", 0);
+        currentTrackingTaskId = ((MainApplication) TaskActivity.this.getApplication()).getCurrentTrackingTaskId();
 
         points = new ArrayList<>();
         databaseHelper = new DatabaseHelper(this);
@@ -77,6 +87,15 @@ public class TaskActivity extends AppCompatActivity {
         taskIdTxt.setText(taskIdString);
         taskDescriptionTxt.setText(taskDescr);
         this.setTitle(taskIdString + " - " + taskDescr); // Set action bar title
+
+        txtSatelliteCount = findViewById(R.id.activity_task_txtSatelliteCount);
+        txtAccuracy = findViewById(R.id.activity_task_txtAccuracy);
+        txtDistance = findViewById(R.id.activity_task_txtDistance);
+        txtPoints = findViewById(R.id.activity_task_txtPoints);
+        txtDuration = findViewById(R.id.activity_task_txtDuration);
+        txtSpeed = findViewById(R.id.activity_task_txtSpeed);
+
+
 
         map = findViewById(R.id.map_osm);
         map.setTileSource(TileSourceFactory.MAPNIK);
@@ -93,8 +112,14 @@ public class TaskActivity extends AppCompatActivity {
 
         startTrackingToggle = findViewById(R.id.buttonOnOff);
 
-        if(((MainApplication) TaskActivity.this.getApplication()).getCurrentTrackingTaskId() == taskId) {
+
+
+        if(currentTrackingTaskId == taskId) {
             startTrackingToggle.setChecked(true);
+            startTrackingToggle.setBackgroundColor(getResources().getColor(R.color.primary));
+        }
+        else {
+            startTrackingToggle.setBackgroundColor(getResources().getColor(R.color.blue));
         }
 
         startTrackingToggle.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener() {
@@ -105,7 +130,7 @@ public class TaskActivity extends AppCompatActivity {
 
                 if(isChecked) {
                     // start tracking service
-                    if(((MainApplication) TaskActivity.this.getApplication()).getCurrentTrackingTaskId() == 0) {
+                    if(currentTrackingTaskId == 0) {
 
                         ((MainApplication) TaskActivity.this.getApplication()).setCurrentTrackingTaskId(taskId);
                         boolean trackingStatus = trackingUtil.startTrackingService(true, true);
