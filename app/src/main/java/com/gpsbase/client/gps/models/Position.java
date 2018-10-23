@@ -18,6 +18,8 @@ package com.gpsbase.client.gps.models;
 import android.location.Location;
 import android.location.LocationManager;
 
+import com.gpsbase.client.MainApplication;
+
 import org.osmdroid.util.GeoPoint;
 
 import java.util.Date;
@@ -27,17 +29,19 @@ public class Position {
     public Position() {
     }
 
-    public Position(String deviceId, Location location, double battery) {
+    public Position(String deviceId, int taskId, String _userId, Location location, double battery) {
         this.deviceId = deviceId;
-        time = new Date(location.getTime());
-        latitude = location.getLatitude();
-        longitude = location.getLongitude();
-        geoPoint = new GeoPoint(latitude, longitude);
-        altitude = location.getAltitude();
-        speed = location.getSpeed() * 1.943844; // speed in knots
-        course = location.getBearing();
+        this.taskId = taskId;
+        this.userId = _userId;
+        this.time = new Date(location.getTime());
+        this.latitude = location.getLatitude();
+        this.longitude = location.getLongitude();
+        this.geoPoint = new GeoPoint(latitude, longitude);
+        this.altitude = location.getAltitude();
+        this.speed = location.getSpeed() * 1.943844; // speed in knots
+        this.course = location.getBearing();
         if (location.getProvider() != null && !location.getProvider().equals(LocationManager.GPS_PROVIDER)) {
-            accuracy = location.getAccuracy();
+            this.accuracy = location.getAccuracy();
         }
         this.battery = battery;
     }
@@ -50,6 +54,16 @@ public class Position {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+
+    private String userId;
+
+    public String getUserId() {
+        return userId;
+    }
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
 

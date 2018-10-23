@@ -33,8 +33,12 @@ import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION = 9;
-    public static final String DATABASE_NAME = "traccar.db";
+    public static final int DATABASE_VERSION = 13;
+    public static final String DATABASE_NAME = "gpsbase.db";
+
+
+    public static final String POSITIONS_TEMP_TABLE = "positionsTemp";
+    public static final String POSITIONS_TABLE = "positions";
 
     public interface DatabaseHandler<T> {
         void onComplete(boolean success, T result);
@@ -76,7 +80,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE position (" +
+        db.execSQL("CREATE TABLE " + POSITIONS_TEMP_TABLE + " (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "taskId INTEGER," +
+                "deviceId TEXT," +
+                "time INTEGER," +
+                "latitude REAL," +
+                "longitude REAL," +
+                "altitude REAL," +
+                "speed REAL," +
+                "course REAL," +
+                "accuracy REAL," +
+                "battery REAL)");
+
+        db.execSQL("CREATE TABLE " + POSITIONS_TABLE + " (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "taskId INTEGER," +
                 "deviceId TEXT," +
@@ -92,13 +109,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS position;");
+        db.execSQL("DROP TABLE IF EXISTS " + POSITIONS_TEMP_TABLE + ";");
+        db.execSQL("DROP TABLE IF EXISTS " + POSITIONS_TABLE + ";");
         onCreate(db);
     }
 
-    public void insertPosition(Position position, int _taskId) {
+    public void insertPosition(String tableName, Position position) {
         ContentValues values = new ContentValues();
-        values.put("taskId", _taskId);
+        values.put("taskId", position.getTaskId());
         values.put("deviceId", position.getDeviceId());
         values.put("time", position.getTime().getTime());
         values.put("latitude", position.getLatitude());
@@ -109,23 +127,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put("accuracy", position.getCourse());
         values.put("battery", position.getBattery());
 
-        db.insertOrThrow("position", null, values);
+        //db.insertOrThrow(tableName, null, values);
+        db.insertOrThrow(POSITIONS_TEMP_TABLE, null, values);
+        db.insertOrThrow(POSITIONS_TABLE, null, values);
     }
 
-    public void insertPositionAsync(final Position position, final int _taskId, DatabaseHandler<Void> handler) {
+    public void insertPositionAsync(final String tableName, final Position position, DatabaseHandler<Void> handler) {
         new DatabaseAsyncTask<Void>(handler) {
             @Override
             protected Void executeMethod() {
-                insertPosition(position, _taskId);
+                insertPosition(tableName, position);
                 return null;
             }
         }.execute();
     }
 
-    public Position selectPosition() {
+    public Position selectFirstPosition(String tableName) {
         Position position = new Position();
 
-        Cursor cursor = db.rawQuery("SELECT * FROM position ORDER BY id LIMIT 1", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + tableName + " ORDER BY id LIMIT 1", null);
         try {
             if (cursor.getCount() > 0) {
 
@@ -153,10 +173,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public ArrayList<Position> getLocationsByTaskId(int _taskId) {
+    public ArrayList<Position> getLocationsByTaskId(String tableName, int _taskId) {
         ArrayList<Position> positions = new ArrayList<>();
 
-        Cursor cursor = db.rawQuery("SELECT * FROM position WHERE TaskId =" + Integer.toString(_taskId) + " ORDER BY id", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + tableName + " WHERE TaskId =" + Integer.toString(_taskId) + " ORDER BY id", null);
         try {
             if (cursor.getCount() > 0) {
 
@@ -194,43 +214,43 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return positions;
     }
 
-    public void selectPositionAsync(DatabaseHandler<Position> handler) {
+    public void selectPositionAsync(final String tableName, DatabaseHandler<Position> handler) {
         new DatabaseAsyncTask<Position>(handler) {
             @Override
             protected Position executeMethod() {
-                return selectPosition();
+                return selectFirstPosition(tableName);
             }
         }.execute();
     }
 
-    public void deletePosition(long id) {
-        if (db.delete("position", "id = ?", new String[] { String.valueOf(id) }) != 1) {
+    public void deletePosition(String tableName, long id) {
+        if (db.delete(tableName, "id = ?", new String[] { String.valueOf(id) }) != 1) {
             throw new SQLException();
         }
     }
 
-    public void deletePositionAsync(final long id, DatabaseHandler<Void> handler) {
+    public void deletePositionAsync(final String tableName, final long id, DatabaseHandler<Void> handler) {
         new DatabaseAsyncTask<Void>(handler) {
             @Override
             protected Void executeMethod() {
-                deletePosition(id);
+                deletePosition(tableName, id);
                 return null;
             }
         }.execute();
     }
 
-    public void deletePositionByTaskIdAsync(final long id, DatabaseHandler<Void> handler) {
+    public void deletePositionByTaskIdAsync(final String tableName, final long id, DatabaseHandler<Void> handler) {
         new DatabaseAsyncTask<Void>(handler) {
             @Override
             protected Void executeMethod() {
-                deletePositionByTaskId(id);
+                deletePositionByTaskId(tableName, id);
                 return null;
             }
         }.execute();
     }
 
-    public void deletePositionByTaskId(long id) {
-        if (db.delete("position", "taskId = ?", new String[] { String.valueOf(id) }) != 1) {
+    public void deletePositionByTaskId(String tableName, long id) {
+        if (db.delete(tableName, "taskId = ?", new String[] { String.valueOf(id) }) != 1) {
             throw new SQLException();
         }
     }

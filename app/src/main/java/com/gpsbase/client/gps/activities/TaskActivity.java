@@ -33,6 +33,8 @@ import org.osmdroid.views.overlay.Polyline;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.gpsbase.client.gps.utils.DatabaseHelper.POSITIONS_TABLE;
+
 
 /**
  * Created by Marko on 11/5/2017.
@@ -62,7 +64,7 @@ public class TaskActivity extends AppCompatActivity {
     private String taskDescr;
     private int taskId;
     private int currentTrackingTaskId;
-
+    private int clientId;
 
     private static final int PERMISSIONS_REQUEST_LOCATION = 2;
     public static final String KEY_STATUS = "status";
@@ -82,6 +84,7 @@ public class TaskActivity extends AppCompatActivity {
         taskDescr = getIntent().getStringExtra("taskDescription");
         taskId = getIntent().getIntExtra("taskId", 0);
         currentTrackingTaskId = ((MainApplication) TaskActivity.this.getApplication()).getCurrentTrackingTaskId();
+        clientId = getIntent().getIntExtra("clientId", 0);
 
         points = new ArrayList<>();
         databaseHelper = new DatabaseHelper(this);
@@ -159,7 +162,7 @@ public class TaskActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                databaseHelper.deletePositionAsync(taskId, new DatabaseHelper.DatabaseHandler<Void>() {
+                /*databaseHelper.deletePositionAsync(POSITIONS_TABLE, taskId, new DatabaseHelper.DatabaseHandler<Void>() {
                     @Override
                     public void onComplete(boolean success, Void result) {
                         if (success) {
@@ -167,7 +170,7 @@ public class TaskActivity extends AppCompatActivity {
                         }
                     }
                 });
-                map.getOverlayManager().clear();
+                map.getOverlayManager().clear();*/
             }
         });
 
@@ -227,7 +230,7 @@ public class TaskActivity extends AppCompatActivity {
 
     private void redrawPolyLines(){
 
-        List<Position> positions = databaseHelper.getLocationsByTaskId(taskId);
+        List<Position> positions = databaseHelper.getLocationsByTaskId(POSITIONS_TABLE, taskId);
 
         if(positions != null) {
             points = new ArrayList<>(); // clear list

@@ -50,7 +50,8 @@ public class RVTasksAdapter extends RecyclerView.Adapter<RVTasksAdapter.TaskView
                 public void onClick(View view) {
                     Intent i = new Intent (view.getContext(), TaskActivity.class);
                     i.putExtra("taskId", task.taskId);
-                    i.putExtra("taskDescription",task.taskDescription);
+                    i.putExtra("taskDescription", task.taskDescription);
+                    i.putExtra("clientId", task.clientId);
                     view.getContext().startActivity(i);
                 }
             });
@@ -79,7 +80,7 @@ public class RVTasksAdapter extends RecyclerView.Adapter<RVTasksAdapter.TaskView
 
     @Override
     public void onBindViewHolder(TaskViewHolder taskViewHolder, int i) {
-        String taskText = "#" + Integer.toString(tasks.get(i).taskId);
+        String taskText = "#" + Long.toString(tasks.get(i).taskId);
         taskViewHolder.txtTaskId.setText(taskText);
         taskViewHolder.txtTaskDescription.setText(tasks.get(i).taskDescription);
         taskViewHolder.txtTaskStart.setText(tasks.get(i).taskStartString);

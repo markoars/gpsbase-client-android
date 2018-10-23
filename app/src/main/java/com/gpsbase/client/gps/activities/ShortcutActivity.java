@@ -34,6 +34,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.gpsbase.client.MainApplication;
 import com.gpsbase.client.gps.fragments.SettingsFragment;
 import com.gpsbase.client.gps.models.Position;
 import com.gpsbase.client.gps.network.PositionProvider;
@@ -122,7 +123,10 @@ public class ShortcutActivity extends AppCompatActivity {
 
             Position position = new Position(
                     preferences.getString(SettingsFragment.KEY_DEVICE, null),
-                    location, PositionProvider.getBatteryLevel(this));
+                    ((MainApplication) this.getApplicationContext()).getCurrentTrackingTaskId(),
+                    "MARS",
+                    location,
+                    PositionProvider.getBatteryLevel(this));
 
             String request = ProtocolFormatter.formatRequest(
                     preferences.getString(SettingsFragment.KEY_URL, null), position, ALARM_SOS);

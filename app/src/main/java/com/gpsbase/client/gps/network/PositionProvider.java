@@ -25,6 +25,7 @@ import android.os.BatteryManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.gpsbase.client.MainApplication;
 import com.gpsbase.client.gps.fragments.SettingsFragment;
 import com.gpsbase.client.gps.models.Position;
 import com.gpsbase.client.gps.utils.DistanceCalculator;
@@ -85,7 +86,8 @@ public abstract class PositionProvider {
                 || angle > 0 && Math.abs(location.getBearing() - lastLocation.getBearing()) >= angle)) {
             Log.i(TAG, "location new");
             lastLocation = location;
-            listener.onPositionUpdate(new Position(deviceId, location, getBatteryLevel(context)));
+            int taskId = ((MainApplication) context.getApplicationContext()).getCurrentTrackingTaskId();
+            listener.onPositionUpdate(new Position(deviceId, taskId, "MARS", location, getBatteryLevel(context)));
         } else {
             Log.i(TAG, location != null ? "location ignored" : "location nil");
         }

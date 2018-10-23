@@ -14,6 +14,7 @@ import org.robolectric.annotation.Config;
 
 import java.util.Date;
 
+import static com.gpsbase.client.gps.utils.DatabaseHelper.POSITIONS_TEMP_TABLE;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
@@ -29,17 +30,17 @@ public class DatabaseHelperTest {
         Position position = new Position("123456789012345", new Location("gps"), 0);
         position.setTime(new Date(0));
 
-        assertNull(databaseHelper.selectPosition());
+        assertNull(databaseHelper.selectFirstPosition());
 
-        databaseHelper.insertPosition(position, 444);
+        databaseHelper.insertPosition(POSITIONS_TEMP_TABLE, position, 444);
 
-        position = databaseHelper.selectPosition();
+        position = databaseHelper.selectFirstPosition(POSITIONS_TEMP_TABLE);
 
         assertNotNull(position);
 
         databaseHelper.deletePosition(position.getId());
 
-        assertNull(databaseHelper.selectPosition());
+        assertNull(databaseHelper.selectFirstPosition(POSITIONS_TEMP_TABLE));
 
     }
 

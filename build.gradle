@@ -10,7 +10,17 @@ buildscript {
 
 allprojects {
     repositories {
+
+        // i found on github that in case some library version is < then something, i should put the maven 1st, and i fixed my compile error
+        maven {
+            url "https://maven.google.com"
+        }
+
         jcenter()
         google()
+
     }
 }
+
+
+
