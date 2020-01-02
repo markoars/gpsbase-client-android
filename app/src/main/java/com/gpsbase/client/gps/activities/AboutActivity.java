@@ -16,15 +16,21 @@
 package com.gpsbase.client.gps.activities;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.gpsbase.client.R;
 
-public class AboutActivity extends AppCompatActivity {
+public class AboutActivity extends RootActivity {
+
+    private Button signOut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,11 +38,22 @@ public class AboutActivity extends AppCompatActivity {
         setContentView(R.layout.activity_about);
 
         TextView title = findViewById(R.id.title);
+        signOut = findViewById(R.id.sign_out);
+
         try {
             title.setText(title.getText() + " " + getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName);
         } catch (NameNotFoundException e) {
             Log.w(AboutActivity.class.getSimpleName(), e);
         }
+
+
+        signOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signOut();
+            }
+        });
+
 
         // set back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -47,5 +64,12 @@ public class AboutActivity extends AppCompatActivity {
         // Go back to prev activity
         finish();
         return true;
+    }
+
+    //sign out method
+    public void signOut() {
+        FirebaseAuth.getInstance().signOut();
+       // startActivity(new Intent(AboutActivity.this, LoginActivity.class));
+       // finish();
     }
 }

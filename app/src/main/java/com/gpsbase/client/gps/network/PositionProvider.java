@@ -25,6 +25,8 @@ import android.os.BatteryManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.gpsbase.client.MainApplication;
 import com.gpsbase.client.gps.fragments.SettingsFragment;
 import com.gpsbase.client.gps.models.Position;
@@ -51,6 +53,8 @@ public abstract class PositionProvider {
     protected long interval;
     protected double distance;
     protected double angle;
+    private FirebaseAuth auth;
+    FirebaseUser firebaseUser;
 
     private Location lastLocation;
 
@@ -72,6 +76,10 @@ public abstract class PositionProvider {
             requestInterval = interval;
         }
 
+
+        auth = FirebaseAuth.getInstance();
+        firebaseUser = auth.getCurrentUser();
+
         type = preferences.getString(SettingsFragment.KEY_PROVIDER, "gps");
     }
 
@@ -86,8 +94,15 @@ public abstract class PositionProvider {
                 || angle > 0 && Math.abs(location.getBearing() - lastLocation.getBearing()) >= angle)) {
             Log.i(TAG, "location new");
             lastLocation = location;
-            int taskId = ((MainApplication) context.getApplicationContext()).getCurrentTrackingTaskId();
-            listener.onPositionUpdate(new Position(deviceId, taskId, "MARS", location, getBatteryLevel(context)));
+            String taskUID = ((MainApplication) context.getApplicationContext()).getCurrentTrackingTaskUID();
+            long taskId = ((MainApplication) context.getApplicationContext()).getCurrentTrackingTaskId();
+
+            Log.i(TAG, "MARS: " + taskUID);
+            //String currentUserId = ((MainApplication) context.getApplicationContext()).getCurrentUserId();
+            String currentUserId = firebaseUser.getUid();
+            String clientUID = ((MainApplication) context.getApplicationContext()).getCurrentClientUID();
+
+            listener.onPositionUpdate(new Position(deviceId, taskId, taskUID, currentUserId, clientUID, location, getBatteryLevel(context)));
         } else {
             Log.i(TAG, location != null ? "location ignored" : "location nil");
         }

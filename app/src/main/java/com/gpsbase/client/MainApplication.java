@@ -32,15 +32,57 @@ import com.gpsbase.client.gps.fragments.SettingsFragment;
 public class MainApplication extends Application {
 
     public static final String PRIMARY_CHANNEL = "default";
-    private int currentTrackingTaskId = 0; // 0 means none is selected
+    private long currentTrackingTaskId; // 0 means none is selected
+    private String currentTrackingTaskUID; // 0 means none is selected
+    private String currentClientUID;
+    private String currentUserId;
+    private String currentCompanyId;
 
-    public int getCurrentTrackingTaskId() {
+    public long getCurrentTrackingTaskId() {
         return currentTrackingTaskId;
     }
 
-    public void setCurrentTrackingTaskId(int _currentTrackingTaskId) {
+    public void setCurrentTrackingTaskId(long _currentTrackingTaskId) {
         this.currentTrackingTaskId = _currentTrackingTaskId;
     }
+
+
+    public String getCurrentTrackingTaskUID() {
+        return currentTrackingTaskUID;
+    }
+
+    public void setCurrentTrackingTaskUID(String _currentTrackingTaskUID) {
+        this.currentTrackingTaskUID = _currentTrackingTaskUID;
+    }
+
+
+   /* public String getCurrentUserId() {
+        return currentUserId;
+    }
+
+    public void setCurrentUserId(String _currentUserId) {
+        this.currentUserId = _currentUserId;
+    }*/
+
+
+    public String getCurrentClientUID() {
+        return currentClientUID;
+    }
+
+    public void setCurrentClientUID(String _currentClientUID) {
+        this.currentClientUID = _currentClientUID;
+    }
+
+
+    public String getCurrentCompanyId() {
+        return currentCompanyId;
+    }
+
+    public void setCurrentCompanyId(String _currentCompanyId) {
+        this.currentCompanyId = _currentCompanyId;
+    }
+
+
 
     @Override
     public void onCreate() {

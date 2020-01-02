@@ -23,10 +23,13 @@ import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.gpsbase.client.MainApplication;
+import com.gpsbase.client.gps.models.User;
 import com.gpsbase.client.gps.models.XTask;
 import com.gpsbase.client.gps.utils.DatabaseHelper;
 import com.gpsbase.client.gps.fragments.SettingsFragment;
@@ -35,6 +38,8 @@ import com.gpsbase.client.gps.activities.StatusActivity;
 import com.gpsbase.client.gps.models.Position;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.gpsbase.client.gps.utils.UserLocalStorage;
+
 import java.util.Calendar;
 
 
@@ -62,9 +67,12 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
     private NetworkManager networkManager;
 
     private PowerManager.WakeLock wakeLock;
+    private FirebaseAuth auth;
+    FirebaseUser firebaseUser;
 
     DatabaseReference firebaseRootRef = FirebaseDatabase.getInstance().getReference();
     DatabaseReference databasePositions = FirebaseDatabase.getInstance().getReference("Positions");
+    DatabaseReference taskCoordinates = FirebaseDatabase.getInstance().getReference("Coordinates/");
 
     private void lock() {
         wakeLock.acquire(WAKE_LOCK_TIMEOUT);
@@ -88,6 +96,10 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
         databaseHelper = new DatabaseHelper(context);
         networkManager = new NetworkManager(context, this);
         isOnline = networkManager.isOnline();
+
+
+        auth = FirebaseAuth.getInstance();
+        firebaseUser = auth.getCurrentUser();
 
 
 
@@ -131,7 +143,6 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
             intent.putExtra("longitude",position.getLongitude());
             intent.putExtra("latitude", position.getLatitude());
             context.sendBroadcast(intent);
-
         }
     }
 
@@ -176,6 +187,10 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
                         read();
                         isWaiting = false;
                     }
+                }
+                else
+                {
+                    //TODO: if we cant write in DB, inform the user that the position will not go to firebase server
                 }
                 unlock();
             }
@@ -227,12 +242,22 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
         log("send", position);
         lock();
 
-       // int positionId = (int) position.getId();
 
-        //String uniqueId = databasePositions.push().getKey();
 
-        //XTask task = new XTask(positionId, "Tinex", "11.01.2017", getSampleDateTime().getTime(), 3);
-        databasePositions.push().child(String.valueOf(position.getId())).setValue(position, new DatabaseReference.CompletionListener() {
+        UserLocalStorage localStorage = new UserLocalStorage(context);
+
+        User loggedUser = localStorage.getLoggedInUser();
+
+        String currentCompanyUID = loggedUser.getCompanyUID();
+
+        String currentClientUID = localStorage.getCurrentClientUID();
+        String taskId = loggedUser.getCurrentTaskUID();
+
+
+        taskCoordinates = FirebaseDatabase.getInstance().getReference("Coordinates/Companies/" + currentCompanyUID + "/Clients/" + currentClientUID + "/Tasks/" + taskId + "/Coordinates/");
+
+
+        taskCoordinates.push().setValue(position, new DatabaseReference.CompletionListener() {
             public void onComplete(DatabaseError error, DatabaseReference ref) {
                 if(error == null) {
                     delete(POSITIONS_TEMP_TABLE, position);
@@ -245,28 +270,6 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
                 unlock();
             }
         });
-
-
-
-
-
-
-
-
-
-      /*  String request = ProtocolFormatter.formatRequest(url, position);
-        RequestManager.sendRequestAsync(request, new RequestManager.RequestHandler() {
-            @Override
-            public void onComplete(boolean success) {
-                if (success) {
-                    delete(position);
-                } else {
-                    StatusActivity.addMessage(context.getString(R.string.status_send_fail));
-                    retry();
-                }
-                unlock();
-            }
-        });*/
     }
 
     private void retry() {

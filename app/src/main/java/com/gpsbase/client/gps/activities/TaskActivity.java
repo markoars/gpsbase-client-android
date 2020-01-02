@@ -16,11 +16,15 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.gpsbase.client.MainApplication;
 import com.gpsbase.client.R;
 import com.gpsbase.client.gps.models.Position;
+import com.gpsbase.client.gps.models.User;
 import com.gpsbase.client.gps.utils.DatabaseHelper;
 import com.gpsbase.client.gps.utils.TrackingServiceUtil;
+import com.gpsbase.client.gps.utils.UserLocalStorage;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
@@ -40,7 +44,7 @@ import static com.gpsbase.client.gps.utils.DatabaseHelper.POSITIONS_TABLE;
  * Created by Marko on 11/5/2017.
  */
 
-public class TaskActivity extends AppCompatActivity {
+public class TaskActivity extends RootActivity {
 
     private TextView taskIdTxt;
     private TextView taskDescriptionTxt;
@@ -62,9 +66,15 @@ public class TaskActivity extends AppCompatActivity {
 
     private String taskIdString;
     private String taskDescr;
-    private int taskId;
-    private int currentTrackingTaskId;
+    private long taskId;
+    private String taskUID;
+    private long currentTrackingTaskId;
+    private String currentTrackingTaskUID;
     private int clientId;
+    private String clientUID;
+    private String companyUID;
+    private  Context context;
+
 
     private static final int PERMISSIONS_REQUEST_LOCATION = 2;
     public static final String KEY_STATUS = "status";
@@ -74,17 +84,23 @@ public class TaskActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Context ctx = getApplicationContext();
+        context = getApplicationContext();
         //important! set your user agent to prevent getting banned from the osm servers
-        Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
+        Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
 
         setContentView(R.layout.activity_task);
 
         taskIdString = Integer.toString(getIntent().getIntExtra("taskId", 0));
         taskDescr = getIntent().getStringExtra("taskDescription");
-        taskId = getIntent().getIntExtra("taskId", 0);
+        taskId = getIntent().getLongExtra("taskId", 0);
+        taskUID = getIntent().getStringExtra("taskUID");
         currentTrackingTaskId = ((MainApplication) TaskActivity.this.getApplication()).getCurrentTrackingTaskId();
+        currentTrackingTaskUID = ((MainApplication) TaskActivity.this.getApplication()).getCurrentTrackingTaskUID();
         clientId = getIntent().getIntExtra("clientId", 0);
+        clientUID = getIntent().getStringExtra("clientUID");
+        clientUID = Integer.toString(clientId);
+
+        companyUID = ((MainApplication) TaskActivity.this.getApplication()).getCurrentCompanyId();
 
         points = new ArrayList<>();
         databaseHelper = new DatabaseHelper(this);
@@ -120,7 +136,7 @@ public class TaskActivity extends AppCompatActivity {
         btnDeleteRecords = findViewById(R.id.buttonDeleteRecords);
 
 
-        if(currentTrackingTaskId == taskId) {
+        if(currentTrackingTaskUID != null && currentTrackingTaskUID.equals(taskUID)) {
             tbtnStartTrackingToggle.setChecked(true);
             tbtnStartTrackingToggle.setBackgroundColor(getResources().getColor(R.color.primary));
         }
@@ -134,11 +150,26 @@ public class TaskActivity extends AppCompatActivity {
 
                 TrackingServiceUtil trackingUtil = new TrackingServiceUtil(TaskActivity.this);
 
+                UserLocalStorage localStorage = new UserLocalStorage(context);
+
+                User loggedUser = localStorage.getLoggedInUser();
+                currentTrackingTaskUID = loggedUser.getCurrentTaskUID();
+
                 if(isChecked) {
+
+
+                   // currentTrackingTaskUID = ((MainApplication) TaskActivity.this.getApplication()).getCurrentTrackingTaskUID();
                     // start tracking service
-                    if(currentTrackingTaskId == 0) {
+                    if(currentTrackingTaskUID == "" || currentTrackingTaskUID == null) {
 
                         ((MainApplication) TaskActivity.this.getApplication()).setCurrentTrackingTaskId(taskId);
+                        ((MainApplication) TaskActivity.this.getApplication()).setCurrentTrackingTaskUID(taskUID);
+                        ((MainApplication) TaskActivity.this.getApplication()).setCurrentClientUID(clientUID);
+                        ((MainApplication) TaskActivity.this.getApplication()).setCurrentCompanyId(companyUID);
+
+                        localStorage.setCurrentTaskUID(taskUID);
+                        localStorage.setCurrentClientUID(clientUID);
+
                         boolean trackingStatus = trackingUtil.startTrackingService(true, true);
                         toggleButton.setChecked(trackingStatus);
                         toggleButton.setBackgroundColor(getResources().getColor(R.color.primary));
@@ -146,11 +177,21 @@ public class TaskActivity extends AppCompatActivity {
                     else {
                         // Tracking is ON, so just change the current selected task Id
                         ((MainApplication) TaskActivity.this.getApplication()).setCurrentTrackingTaskId(taskId);
+                        ((MainApplication) TaskActivity.this.getApplication()).setCurrentTrackingTaskUID(taskUID);
+                        ((MainApplication) TaskActivity.this.getApplication()).setCurrentClientUID(clientUID);
+                        ((MainApplication) TaskActivity.this.getApplication()).setCurrentCompanyId(companyUID);
+                        localStorage.setCurrentTaskUID(taskUID);
+                        localStorage.setCurrentClientUID(clientUID);
                     }
                 }
                 else {
                     // stop tracking service
                     ((MainApplication) TaskActivity.this.getApplication()).setCurrentTrackingTaskId(0); // set none is selected
+                    ((MainApplication) TaskActivity.this.getApplication()).setCurrentTrackingTaskUID("");
+                    ((MainApplication) TaskActivity.this.getApplication()).setCurrentClientUID(""); // set none is selected
+                    ((MainApplication) TaskActivity.this.getApplication()).setCurrentCompanyId("");
+                    localStorage.setCurrentTaskUID("");
+                    localStorage.setCurrentClientUID("");
                     trackingUtil.stopTrackingService();
                     toggleButton.setBackgroundColor(getResources().getColor(R.color.blue));
                 }
@@ -162,15 +203,39 @@ public class TaskActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                /*databaseHelper.deletePositionAsync(POSITIONS_TABLE, taskId, new DatabaseHelper.DatabaseHandler<Void>() {
+                //TrackingServiceUtil trackingUtil = new TrackingServiceUtil(TaskActivity.this);
+
+                //trackingUtil.stopTrackingService();
+                //tbtnStartTrackingToggle.setBackgroundColor(getResources().getColor(R.color.blue));
+
+
+                UserLocalStorage localStorage = new UserLocalStorage(getApplicationContext());
+
+                User loggedUser = localStorage.getLoggedInUser();
+
+                String fbUrl = "Coordinates/Companies/" + loggedUser.getCompanyUID() + "/Clients/" + clientUID + "/Tasks/" + taskUID + "/";
+
+                DatabaseReference taskCoordinates = FirebaseDatabase.getInstance().getReference(fbUrl);
+                taskCoordinates.removeValue();
+
+
+
+
+                databaseHelper.deletePositionByTaskIdAsync(POSITIONS_TABLE, taskId, new DatabaseHelper.DatabaseHandler<Void>() {
                     @Override
                     public void onComplete(boolean success, Void result) {
                         if (success) {
+                            int dd = 5;
                         } else {
+                            int cc = 6;
                         }
+
+                        redrawPolyLines();
+                        map.getOverlayManager().clear();
                     }
                 });
-                map.getOverlayManager().clear();*/
+
+
             }
         });
 
@@ -232,10 +297,12 @@ public class TaskActivity extends AppCompatActivity {
 
         List<Position> positions = databaseHelper.getLocationsByTaskId(POSITIONS_TABLE, taskId);
 
+        List<GeoPoint> geoPoints = new ArrayList<>();
+        Polyline line = new Polyline();
+
         if(positions != null) {
             points = new ArrayList<>(); // clear list
 
-            List<GeoPoint> geoPoints = new ArrayList<>();
             map.getOverlayManager().clear(); // remove previous polyLines
             GeoPoint currentPoint = new GeoPoint(0, 0);
 
@@ -251,12 +318,17 @@ public class TaskActivity extends AppCompatActivity {
             }
 
             //add your points here
-            Polyline line = new Polyline();
             line.setPoints(geoPoints);
             map.getOverlayManager().add(line);
             map.getController().animateTo(currentPoint);
 
             addSimpleMarker(currentPoint);
+        }
+        else
+        {
+            map.getOverlayManager().clear();
+            line.setPoints(geoPoints);
+            map.getOverlayManager().add(line);
         }
     }
 

@@ -13,14 +13,13 @@ public class Client {
     public int id;
     public String name; // IKEA, Amazon
 
-    public List<XTask> tasks = new ArrayList<>();    // Taks: Aerodrom1, Aerodrom2
+    //public List<XTask> tasks = new ArrayList<>();    // Taks: Aerodrom1, Aerodrom2
 
     public Client(){}
-    public Client(int _id, String _name, List<XTask> _tasks)
+    public Client(int _id, String _name)
     {
         id = _id;
         name = _name;
-        tasks = _tasks;
     }
 
 
@@ -30,7 +29,6 @@ public class Client {
     public String getName() {
         return name;
     }
-    public List<XTask> getTasks() {
-        return tasks;
-    }
 }
+
+

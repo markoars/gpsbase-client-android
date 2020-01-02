@@ -34,6 +34,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.gpsbase.client.MainApplication;
 import com.gpsbase.client.gps.fragments.SettingsFragment;
 import com.gpsbase.client.gps.models.Position;
@@ -43,7 +45,7 @@ import com.gpsbase.client.R;
 import com.gpsbase.client.gps.network.RequestManager;
 import com.gpsbase.client.gps.services.TrackingService;
 
-public class ShortcutActivity extends AppCompatActivity {
+public class ShortcutActivity extends RootActivity {
 
     public static final String EXTRA_ACTION = "action";
     public static final String ACTION_START = "start";
@@ -51,6 +53,9 @@ public class ShortcutActivity extends AppCompatActivity {
     public static final String ACTION_SOS = "sos";
 
     private static final String ALARM_SOS = "sos";
+
+    private FirebaseAuth auth;
+    FirebaseUser firebaseUser;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,6 +68,9 @@ public class ShortcutActivity extends AppCompatActivity {
                     getString(R.string.shortcut_stop),
                     getString(R.string.shortcut_sos)
             };
+
+            auth = FirebaseAuth.getInstance();
+            firebaseUser = auth.getCurrentUser();
 
             ListView listView = findViewById(android.R.id.list);
 
@@ -120,11 +128,13 @@ public class ShortcutActivity extends AppCompatActivity {
         }
 
         if (location != null) {
-
+            // (String deviceId, int taskId, String taskUID, String _userUID, String _clientUID, Location location, double battery) {
             Position position = new Position(
                     preferences.getString(SettingsFragment.KEY_DEVICE, null),
                     ((MainApplication) this.getApplicationContext()).getCurrentTrackingTaskId(),
-                    "MARS",
+                    ((MainApplication) this.getApplicationContext()).getCurrentTrackingTaskUID(),
+                    firebaseUser.getUid(),
+                    currentUserId,
                     location,
                     PositionProvider.getBatteryLevel(this));
 

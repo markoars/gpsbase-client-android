@@ -33,7 +33,7 @@ import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION = 13;
+    public static final int DATABASE_VERSION = 15;
     public static final String DATABASE_NAME = "gpsbase.db";
 
 
@@ -83,6 +83,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + POSITIONS_TEMP_TABLE + " (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "taskId INTEGER," +
+                "taskUID TEXT," +
+                "userUID TEXT," +
+                "clientUID TEXT," +
                 "deviceId TEXT," +
                 "time INTEGER," +
                 "latitude REAL," +
@@ -96,6 +99,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + POSITIONS_TABLE + " (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "taskId INTEGER," +
+                "taskUID TEXT," +
+                "userUID TEXT," +
+                "clientUID TEXT," +
                 "deviceId TEXT," +
                 "time INTEGER," +
                 "latitude REAL," +
@@ -117,6 +123,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void insertPosition(String tableName, Position position) {
         ContentValues values = new ContentValues();
         values.put("taskId", position.getTaskId());
+        values.put("taskUID", position.getTaskUID());
+        values.put("userUID", position.getUserId());
+        values.put("clientUID", position.getClientUID());
         values.put("deviceId", position.getDeviceId());
         values.put("time", position.getTime().getTime());
         values.put("latitude", position.getLatitude());
@@ -173,10 +182,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public ArrayList<Position> getLocationsByTaskId(String tableName, int _taskId) {
+    public ArrayList<Position> getLocationsByTaskId(String tableName, long _taskId) {
         ArrayList<Position> positions = new ArrayList<>();
 
-        Cursor cursor = db.rawQuery("SELECT * FROM " + tableName + " WHERE TaskId =" + Integer.toString(_taskId) + " ORDER BY id", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + tableName + " WHERE TaskId =" + Long.toString(_taskId) + " ORDER BY id", null);
         try {
             if (cursor.getCount() > 0) {
 
@@ -254,5 +263,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             throw new SQLException();
         }
     }
+
 
 }

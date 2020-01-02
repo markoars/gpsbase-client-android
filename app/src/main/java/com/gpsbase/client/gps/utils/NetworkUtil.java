@@ -34,7 +34,7 @@ public class NetworkUtil {
 
     }
 
-    public List<XTask> getTasks(DataSnapshot snapshot)
+   /* public List<XTask> getTasks(DataSnapshot snapshot)
     {
         final List<XTask> tasks = new ArrayList<>();
 
@@ -51,18 +51,19 @@ public class NetworkUtil {
 
 
             long taskId = (long) testTask.get("taskId");
+
             String taskDescr = (String) testTask.get("taskDescription");
             String taskStartString = (String) testTask.get("taskStartString");
             long photoId = (long) testTask.get("photoId");
 
 
-            tasks.add(new XTask(taskId, taskDescr, taskStartString, new Date(), 3,  photoId));
+            tasks.add(new XTask(taskId, "", taskDescr, taskStartString, new Date(), 3,  photoId));
         }
 
         return tasks;
     }
-
-    public List<XTask> getPendingTasks(final RVTasksAdapter adapter)
+*/
+   /* public List<XTask> getPendingTasks(final RVTasksAdapter adapter)
     {
 
         final List<XTask> tasks = new ArrayList<>();
@@ -93,7 +94,7 @@ public class NetworkUtil {
                     long photoId = (long) testTask.get("photoId");
 
 
-                    tasks.add(new XTask(taskId, taskDescr, taskStartString, new Date(), 3,  photoId));
+                    tasks.add(new XTask(taskId, "", taskDescr, taskStartString, new Date(), 3,  photoId));
                 }
 
                 adapter.rebindData();
@@ -104,7 +105,7 @@ public class NetworkUtil {
                // Log.e(TAG, databaseError.toString();
 
             }
-        });
+        });*/
 
 
        // XTask task1 = new XTask(1, "Аеродром, Лисиче, Центар", "понеделник, 02.03.2017 08:00", new Date(),  R.drawable.bg_circle);
@@ -126,6 +127,6 @@ public class NetworkUtil {
        // tasks.add(task3);
 
 
-        return tasks;
-    }
+        //return tasks;
+   // }
 }

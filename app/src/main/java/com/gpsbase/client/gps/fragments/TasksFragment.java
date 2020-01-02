@@ -5,9 +5,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -17,19 +19,30 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.gpsbase.client.R;
 import com.gpsbase.client.gps.activities.StatusActivity;
+import com.gpsbase.client.gps.activities.TaskActivity;
 import com.gpsbase.client.gps.models.Client;
+import com.gpsbase.client.gps.models.ClientDetails;
 import com.gpsbase.client.gps.models.Companies;
 import com.gpsbase.client.gps.models.Company;
+import com.gpsbase.client.gps.models.Coordinate;
 import com.gpsbase.client.gps.models.NewTasks;
 import com.gpsbase.client.gps.models.NewUsers;
 import com.gpsbase.client.gps.models.Position;
 import com.gpsbase.client.gps.models.TaskCoordinates;
+import com.gpsbase.client.gps.models.User;
+import com.gpsbase.client.gps.models.Worker;
+import com.gpsbase.client.gps.models.WorkerDetails;
+import com.gpsbase.client.gps.models.WorkerTasks;
 import com.gpsbase.client.gps.models.XTask;
 import com.gpsbase.client.gps.adapters.RVTasksAdapter;
 import com.gpsbase.client.gps.utils.NetworkUtil;
+import com.gpsbase.client.gps.utils.UserLocalStorage;
 
+import java.io.Console;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.lang.Iterable;
 import java.util.List;
 import java.util.Date;
 import java.util.Map;
@@ -44,14 +57,34 @@ public class TasksFragment extends Fragment {
     private RVTasksAdapter adapter;
     NetworkUtil networkUtil;
 
+    public static String testStr = "";
+
+
+    // 1) Companies
+
+    DatabaseReference companiesRef = FirebaseDatabase.getInstance().getReference("Company");
+    DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
+    DatabaseReference companyClientsRef = FirebaseDatabase.getInstance().getReference("CompanyClients");
+    DatabaseReference companyClientsDetailsRef = FirebaseDatabase.getInstance().getReference("CompanyClientsDetails");
 
     DatabaseReference distributionComapniesRef = FirebaseDatabase.getInstance().getReference("DistributionCompanies");
     DatabaseReference metoCompanyClientsRef = FirebaseDatabase.getInstance().getReference("DistributionCompanies/Meto Flyer company/clients");
     DatabaseReference metoPositionsRef = FirebaseDatabase.getInstance().getReference("DistributionCompanies/Meto Flyer company/clients/Tinex/tasks/1/positions");
+    DatabaseReference tasksByUserRef = FirebaseDatabase.getInstance().getReference("TasksByUser/Users/8bWZdKAftgTSkmyQVR0o7fYFkdM2");
+    DatabaseReference coordinatesRef = FirebaseDatabase.getInstance().getReference("Coordinates/Companies/1/Clients/1/Tasks/1/Coordinates");
+    DatabaseReference workersRef = FirebaseDatabase.getInstance().getReference("Workers/Company/1");
+    DatabaseReference workerDetailsRef = FirebaseDatabase.getInstance().getReference("WorkerDetails/Company/1");
+    DatabaseReference workerTasksRef = FirebaseDatabase.getInstance().getReference("WorkerTasks/Workers");
+    DatabaseReference companyTasksRef = FirebaseDatabase.getInstance().getReference("CompanyTasks/Company");
+
 
     DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference("");
     DatabaseReference firebaseRootRef = FirebaseDatabase.getInstance().getReference("NewTasks");
     DatabaseReference databaseTasks = FirebaseDatabase.getInstance().getReference("Tasks");
+
+
+    public UserLocalStorage localStorage;
+    public User loggedUser;
 
     @Nullable
     @Override
@@ -66,6 +99,10 @@ public class TasksFragment extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         rv.setLayoutManager(llm);
         rv.setHasFixedSize(true);
+
+
+        localStorage = new UserLocalStorage(this.getContext());
+        loggedUser = localStorage.getLoggedInUser();
 
         initializeData();
         initializeAdapter();
@@ -83,7 +120,7 @@ public class TasksFragment extends Fragment {
 
         /// Root companies
 
-       /* List<Position> positions = new ArrayList<>();
+        List<Position> positions = new ArrayList<>();
         Position position = new Position();
         position.setId(1);
         position.setLatitude(11111);
@@ -97,7 +134,10 @@ public class TasksFragment extends Fragment {
         List<XTask> tasks = new ArrayList<>();
         XTask task = new XTask();
         task.taskId = 1;
-        task.taskDescription = "Task 1";
+        task.taskDescription = "Аеродром 1 тест";
+        task.clientId = 1;
+        Date date = new Date();
+        task.taskStart = date;
         tasks.add(task);
 
         List<XTask> tasks2 = new ArrayList<>();
@@ -110,22 +150,28 @@ public class TasksFragment extends Fragment {
         Client client = new Client();
         client.id = 1;
         client.name = "Tinex";
-        client.tasks = tasks;
+       // client.tasks = tasks;
         clients.add(client);
 
 
         Client client2 = new Client();
-        client2.id = 2;
-        client2.name = "Vero";
-        client2.tasks = tasks2;
+        client2.id = 3;
+        client2.name = "Vero 2";
+       // client2.tasks = tasks2;
         clients.add(client2);
+
+        ClientDetails clientDetails1 = new ClientDetails();
+        clientDetails1.id = 1;
+        clientDetails1.name = "Tinex";
+        clientDetails1.details = "Tinex details";
+
 
 
         List<Company> companiesList = new ArrayList<>();
         Company company = new Company();
         company.id = 1;
         company.name = "Meto Flyer company";
-        company.clients = clients;
+       // company.clients = clients;
         companiesList.add(company);
 
 
@@ -133,165 +179,154 @@ public class TasksFragment extends Fragment {
         companies.description = "Distribution companies";
         companies.companies = companiesList;
 
+        Coordinate coordinate = new Coordinate("7213guy13287duy12", position);
 
-        metoPositionsRef.child(String.valueOf(position.getId())).setValue(position, new DatabaseReference.CompletionListener() {
+        Worker worker = new Worker();
+        worker.firstName = "Marko";
+        worker.lastName = "Arsovski";
+        worker.companyID = "1";
+        worker.companyName = "Meto flyer company";
+        worker.userID = "1";
+
+        WorkerDetails workerDetails = new WorkerDetails();
+        workerDetails.firstName = "Marko";
+        workerDetails.lastName = "Arsovski";
+        workerDetails.companyID = "1";
+        workerDetails.companyName = "Meto flyer company";
+        workerDetails.userID = "1";
+        workerDetails.setDetails("details text");
+
+
+
+        WorkerTasks workerTasks = new WorkerTasks();
+        workerTasks.workerId = "JXBluJp8AQZ2FVeqdMNnDbAt3RS2";//"8bWZdKAftgTSkmyQVR0o7fYFkdM2";
+        workerTasks.tasks = tasks;
+
+        // 0) User pays/sets trial by providing an email, and company name ->
+            // 0.1) we create a new user by code and send his password by an email
+            // 0.2) we create a company and set a User/Worker
+
+        String companyId = "-LVDzu70Z23goqujCENc";
+        String userId = "79AYbvImGUXT67zYULtxca0XEAB3";//"8bWZdKAftgTSkmyQVR0o7fYFkdM2";
+
+        // 1) Companies
+
+        // 2) Company clients
+
+        // 3) Company users
+
+        // 4) Company tasks
+
+        // 5) Assign users to tasks -> Create worker tasks
+
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+        String newCompanyKey = companiesRef.push().getKey();
+
+        // Kokrisnikot plakja i vnesuva ime na kompanija i user email i password (nie mu generirame)
+        User userNew;
+
+        userNew = new User();
+        userNew.userUID = userId;
+        userNew.firstName = "Marko";
+        userNew.lastName = "Arsovski";
+        userNew.companyName = company.getName();
+        userNew.companyUID = newCompanyKey;
+
+       /* Map newCompanyAndUserData = new HashMap();
+
+        newCompanyAndUserData.put("Company/" + newCompanyKey, company);
+        newCompanyAndUserData.put("Users/"  + userId, userNew);
+
+
+        // Do a deep-path update
+        rootRef.updateChildren(newCompanyAndUserData, new DatabaseReference.CompletionListener() {
             public void onComplete(DatabaseError error, DatabaseReference ref) {
                 if(error == null) {
-                    // delete(POSITIONS_TEMP_TABLE, position);
-                    System.out.println("Firebase. Error = " + error);
+                    System.out.println("Success");
                 }
                 else {
                     System.out.println("Firebase. Error = " + error);
-                    int a = 4;
-                    // StatusActivity.addMessage(context.getString(R.string.status_send_fail));
-                    //  retry();
                 }
-                //unlock();
-            }
-        });
-*/
-        // Пробав да го креирам дрвото само со вгнездени објекти, но имаше проблем при сетирање на примарниот клуч
-        // Затоа ќе го градам дрвото чекор по чекот програматски, и би било ок според мене
-        // Види го дрвото во фиребасе како изгледа сега, со командиве искоментирани доле.
-        // Плус од кога ке го испраксирам градењето на дрвото и дефинирам командите кога ќе се генерира кој објект
-        // потоа ќе размислам колку би било тешко да ја реструктурирам базата (за да биде лесно да се зимаат коорнинати од одредени корисници а не на сите од тој таск
-        // , или вака че тераме со наједноставниот принцип
-       /* metoCompanyRef.child("2").setValue(task, new DatabaseReference.CompletionListener() {
-            public void onComplete(DatabaseError error, DatabaseReference ref) {
-                if(error == null) {
-                    // delete(POSITIONS_TEMP_TABLE, position);
-                    System.out.println("Firebase. Error = " + error);
-                }
-                else {
-                    System.out.println("Firebase. Error = " + error);
-                    int a = 4;
-                    // StatusActivity.addMessage(context.getString(R.string.status_send_fail));
-                    //  retry();
-                }
-                //unlock();
-            }
-        });
-*/
-
-       /* metoCompanyClientsRef.child(client2.getName()).setValue(client2, new DatabaseReference.CompletionListener() {
-            public void onComplete(DatabaseError error, DatabaseReference ref) {
-                if(error == null) {
-                    // delete(POSITIONS_TEMP_TABLE, position);
-                    System.out.println("Firebase. Error = " + error);
-                }
-                else {
-                    System.out.println("Firebase. Error = " + error);
-                    int a = 4;
-                    // StatusActivity.addMessage(context.getString(R.string.status_send_fail));
-                    //  retry();
-                }
-                //unlock();
-            }
-        });*/
-
-
-       /* distributionComapniesRef.child(company.getName()).setValue(company, new DatabaseReference.CompletionListener() {
-            public void onComplete(DatabaseError error, DatabaseReference ref) {
-                if(error == null) {
-                    // delete(POSITIONS_TEMP_TABLE, position);
-                    System.out.println("Firebase. Error = " + error);
-                }
-                else {
-                    System.out.println("Firebase. Error = " + error);
-                    int a = 4;
-                    // StatusActivity.addMessage(context.getString(R.string.status_send_fail));
-                    //  retry();
-                }
-                //unlock();
-            }
-        });*/
-
-
-        // Автоматско градење на дрвото - не  е ОК поради примарниот клуч (ид е)
-     /*   rootRef.child("DistributionCompanies").setValue(companies, new DatabaseReference.CompletionListener() {
-            public void onComplete(DatabaseError error, DatabaseReference ref) {
-                if(error == null) {
-                    // delete(POSITIONS_TEMP_TABLE, position);
-                    System.out.println("Firebase. Error = " + error);
-                }
-                else {
-                    System.out.println("Firebase. Error = " + error);
-                    int a = 4;
-                    // StatusActivity.addMessage(context.getString(R.string.status_send_fail));
-                    //  retry();
-                }
-                //unlock();
             }
         });*/
 
 
 
-       /* NewTasks newTasks = new NewTasks();
-        ArrayList<TaskCoordinates> newTaskCoordinateList = new ArrayList<TaskCoordinates>();
-        Position position = new Position();
-        TaskCoordinates taskCoordinates = new TaskCoordinates();
-        taskCoordinates.position = position;
-        taskCoordinates.userId = "1";
+        // 2) Company clients
 
-        newTaskCoordinateList.add(taskCoordinates);
-        newTasks.taskId = "4444";
-        newTasks.taskCoordinates = newTaskCoordinateList;*/
-
-      /*  firebaseRootRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-
-
-                for (DataSnapshot messageSnapshot: snapshot.getChildren()) {
-                    NewTasks message = messageSnapshot.getValue(NewTasks.class);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Log.e(TAG, databaseError.toString();
-
-            }
-        });*/
-
-        //firebaseRootRef.child(newTasks.taskId).setValue()
+        // Admin is created, he can start creating clients
 
 
 
-       /* firebaseRootRef.child(newTasks.taskId).setValue(newTasks, new DatabaseReference.CompletionListener() {
+        /*companyClientsRef = FirebaseDatabase.getInstance().getReference("CompanyClients/" + companyId + "/Clients");
+        companyClientsDetailsRef = FirebaseDatabase.getInstance().getReference("CompanyClientsDetails/" + companyId + "/Clients");
+
+
+        String newRecordKey = companyClientsRef.push().getKey();
+
+        Map companyClientsData = new HashMap();
+
+        companyClientsData.put("CompanyClients/" + companyId + "/Clients/" + newRecordKey, client);
+        companyClientsData.put("CompanyClientsDetails/" + companyId + "/Clients/" + newRecordKey, clientDetails1);
+
+
+        // Do a deep-path update
+        rootRef.updateChildren(companyClientsData, new DatabaseReference.CompletionListener() {
             public void onComplete(DatabaseError error, DatabaseReference ref) {
                 if(error == null) {
-                   // delete(POSITIONS_TEMP_TABLE, position);
-                    System.out.println("Firebase. Error = " + error);
+                    System.out.println("Success");
                 }
                 else {
                     System.out.println("Firebase. Error = " + error);
-                    int a = 4;
-                   // StatusActivity.addMessage(context.getString(R.string.status_send_fail));
-                  //  retry();
                 }
-                //unlock();
             }
         });*/
 
 
+        // 3) Company workers -> done in 1)  workers are Users
 
 
-       /* rootRef.child("New").setValue(newTasks, new DatabaseReference.CompletionListener() {
+
+
+
+        // 4) Company tasks
+
+        // Admin creates a task (also can add workers to it)
+
+
+        /*DatabaseReference companyTasksRef = FirebaseDatabase.getInstance().getReference("CompanyTasks/Company/" + companyId + "/Tasks/");
+
+        String newTaskKey = companyTasksRef.push().getKey();
+
+        Map companyTasksMap = new HashMap();
+
+        task.taskUID = newTaskKey;
+
+       // companyTasksMap.put("CompanyTasks/Company/" + companyId + "/Tasks/" + newTaskKey, task);
+       // companyTasksMap.put("CompanyTasksDetails/Company/" + companyId + "/Tasks/" + newTaskKey, task);
+        companyTasksMap.put("WorkerTasks/Workers/" + userId + "/Tasks/" + newTaskKey, task);
+        companyTasksMap.put("WorkerTasksDetails/Workers/" + userId + "/Tasks/" + newTaskKey, task);
+
+
+        // Do a deep-path update
+        rootRef.updateChildren(companyTasksMap, new DatabaseReference.CompletionListener() {
             public void onComplete(DatabaseError error, DatabaseReference ref) {
                 if(error == null) {
-                    // delete(POSITIONS_TEMP_TABLE, position);
-                    System.out.println("Firebase. Error = " + error);
+                    System.out.println("Success");
                 }
                 else {
                     System.out.println("Firebase. Error = " + error);
-                    int a = 4;
-                    // StatusActivity.addMessage(context.getString(R.string.status_send_fail));
-                    //  retry();
                 }
-                //unlock();
             }
         });*/
+
+        // 5) Assign users to tasks -> Create worker tasks
+
+
+
     }
 
     private void initializeAdapter(){
@@ -314,39 +349,25 @@ public class TasksFragment extends Fragment {
 
     public void getPendingTasks()
     {
-        databaseTasks.addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference workerTasksRef = FirebaseDatabase.getInstance().getReference("WorkerTasks/Workers/" + loggedUser.getUserUID());
+
+        workerTasksRef.child("Tasks").orderByChild("taskStart").addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                tasks.clear();
 
+                for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
 
-                GenericTypeIndicator<HashMap<String, Object>> objectsGTypeInd = new GenericTypeIndicator<HashMap<String, Object>>() {};
-                Map<String, Object> objectHashMap = snapshot.getValue(objectsGTypeInd);
-                //ArrayList<Object> objectArrayList = new ArrayList<Object>(objectHashMap.values());
+                    XTask task = childSnapshot.getValue(XTask.class);
 
-
-                for (Map.Entry<String, Object> entry : objectHashMap.entrySet()){
-
-                    Object objectTask = entry.getValue();
-
-                    HashMap<String, Object> testTask = (HashMap<String, Object>) objectTask;
-
-
-                    long taskId = (long) testTask.get("taskId");
-                    String taskDescr = (String) testTask.get("taskDescription");
-                    String taskStartString = (String) testTask.get("taskStartString");
-                    long photoId = (long) testTask.get("photoId");
-
-
-                    tasks.add(new XTask(taskId, taskDescr, taskStartString, new Date(), 3,  photoId));
+                    tasks.add(task);
                 }
-
                 adapter.rebindData();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 // Log.e(TAG, databaseError.toString();
-
             }
         });
     }

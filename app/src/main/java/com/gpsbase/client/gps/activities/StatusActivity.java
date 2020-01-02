@@ -31,7 +31,7 @@ import android.widget.ListView;
 
 import com.gpsbase.client.R;
 
-public class StatusActivity extends AppCompatActivity {
+public class StatusActivity extends RootActivity {
 
     private static final int LIMIT = 20;
 

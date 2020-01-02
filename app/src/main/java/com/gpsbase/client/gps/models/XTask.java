@@ -11,26 +11,32 @@ import java.util.List;
 
 public class XTask {
     public long taskId;
+    public String taskUID;
     public String taskDescription;
     public Date taskStart;
     public String taskStartString;
     public long photoId;
     public int clientId;
+    public String clientUID;
 
     public List<Position> positions = new ArrayList<>();
 
     public XTask(){}
     public XTask(long taskId,
+                   String taskUID,
                    String taskDescription,
                    String taskStartString,
                    Date taskStart,
                    int clientId,
+                   String clientUID,
                    long photoId) {
         this.taskDescription = taskDescription;
+        this.taskUID = taskUID;
         this.taskId = taskId;
         this.taskStart = getSampleDateTime().getTime();
         this.taskStartString = taskStartString;
         this.clientId = clientId;
+        this.clientUID = clientUID;
         this.photoId = photoId;
     }
 
@@ -39,6 +45,9 @@ public class XTask {
     public long getTaskId() {
         return taskId;
     }
+    public String getTaskUID() {
+        return taskUID;
+    }
     public String getTaskDescription() {
         return taskDescription;
     }
@@ -46,9 +55,8 @@ public class XTask {
         return taskStart;
     }
     public String getTaskStartString() { return  taskStartString; }
-    public int getClientId() {
-        return clientId;
-    }
+    public int getClientId() { return clientId;}
+    public String getClientUID() { return clientUID; }
     public long getPhotoId() { return photoId; }
     public List<Position> getPositions() { return positions; }
 

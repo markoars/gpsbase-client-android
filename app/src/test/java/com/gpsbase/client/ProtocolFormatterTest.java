@@ -22,7 +22,7 @@ public class ProtocolFormatterTest {
     @Test
     public void testFormatRequest() throws Exception {
 
-        Position position = new Position("123456789012345", new Location("gps"), 0);
+        Position position = new Position("123456789012345", "", "", new Location("gps"), 0);
         position.setTime(new Date(0));
 
         String url = ProtocolFormatter.formatRequest("http://localhost:5055", position);
@@ -32,7 +32,7 @@ public class ProtocolFormatterTest {
     @Test
     public void testFormatPathPortRequest() throws Exception {
 
-        Position position = new Position("123456789012345", new Location("gps"), 0);
+        Position position = new Position("123456789012345", "", "", new Location("gps"), 0);
         position.setTime(new Date(0));
 
         String url = ProtocolFormatter.formatRequest("http://localhost:8888/path", position);
@@ -42,7 +42,7 @@ public class ProtocolFormatterTest {
     @Test
     public void testFormatAlarmRequest() throws Exception {
 
-        Position position = new Position("123456789012345", new Location("gps"), 0);
+        Position position = new Position("123456789012345", "", "", new Location("gps"), 0);
         position.setTime(new Date(0));
 
         String url = ProtocolFormatter.formatRequest("http://localhost:5055/path", position, "alert message");

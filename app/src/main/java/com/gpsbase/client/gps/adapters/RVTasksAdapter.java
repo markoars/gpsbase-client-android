@@ -49,9 +49,12 @@ public class RVTasksAdapter extends RecyclerView.Adapter<RVTasksAdapter.TaskView
                 @Override
                 public void onClick(View view) {
                     Intent i = new Intent (view.getContext(), TaskActivity.class);
-                    i.putExtra("taskId", task.taskId);
-                    i.putExtra("taskDescription", task.taskDescription);
-                    i.putExtra("clientId", task.clientId);
+                    i.putExtra("taskId", task.getTaskId());
+                    i.putExtra("taskUID", task.getTaskUID());
+                    i.putExtra("taskDescription", task.getTaskDescription());
+                    i.putExtra("clientId", task.getClientId());
+                    i.putExtra("clientUID", task.getClientUID());
+
                     view.getContext().startActivity(i);
                 }
             });
@@ -86,10 +89,10 @@ public class RVTasksAdapter extends RecyclerView.Adapter<RVTasksAdapter.TaskView
         taskViewHolder.txtTaskStart.setText(tasks.get(i).taskStartString);
         taskViewHolder.task = tasks.get(i);
 
-        int currentTrackingTaskId = ((MainApplication) context.getApplicationContext()).getCurrentTrackingTaskId();
+        String currentTrackingTaskId = ((MainApplication) context.getApplicationContext()).getCurrentTrackingTaskUID();
 
         if(context != null) {
-            if (currentTrackingTaskId == tasks.get(i).taskId) {
+            if (currentTrackingTaskId == tasks.get(i).taskUID) {
                 taskViewHolder.txtTaskStatus.setVisibility(View.VISIBLE);
             }
             else {

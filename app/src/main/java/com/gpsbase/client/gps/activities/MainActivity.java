@@ -36,7 +36,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity implements HomeFragment.OnFragmentInteractionListener {
+public class MainActivity extends RootActivity implements HomeFragment.OnFragmentInteractionListener {
 
     private NavigationView navigationView;
     private DrawerLayout drawer;
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
 
 
         // Log in Firebase simple example
-        List<AuthUI.IdpConfig> providers;
+       /* List<AuthUI.IdpConfig> providers;
         providers = new ArrayList<>();
         providers.add(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build());
 
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
                         .createSignInIntentBuilder()
                         .setAvailableProviders(providers)
                         .build(),
-                RC_SIGN_IN);
+                RC_SIGN_IN);*/
 
 
 
@@ -116,7 +116,6 @@ public class MainActivity extends AppCompatActivity implements HomeFragment.OnFr
                         .setAction("Action", null).show();
             }
         });*/
-
 
         // load nav menu header data
         loadNavHeader();

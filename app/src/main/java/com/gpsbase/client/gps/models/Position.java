@@ -29,10 +29,12 @@ public class Position {
     public Position() {
     }
 
-    public Position(String deviceId, int taskId, String _userId, Location location, double battery) {
+    public Position(String deviceId, long taskId, String taskUID, String _userUID, String _clientUID, Location location, double battery) {
         this.deviceId = deviceId;
         this.taskId = taskId;
-        this.userId = _userId;
+        this.taskUID = taskUID;
+        this.userId = _userUID;
+        this.clientUID = _clientUID;
         this.time = new Date(location.getTime());
         this.latitude = location.getLatitude();
         this.longitude = location.getLongitude();
@@ -77,15 +79,36 @@ public class Position {
         this.deviceId = deviceId;
     }
 
-    private int taskId;
+    private long taskId;
 
-    public int getTaskId() {
+    public long getTaskId() {
         return taskId;
     }
-
-    public void setTaskId(int taskId) {
+    public void setTaskId(long taskId) {
         this.taskId = taskId;
     }
+
+    private String clientUID;
+
+    public String getClientUID() {
+        return clientUID;
+    }
+
+    public void setClientUID(String clientUID) {
+        this.clientUID = clientUID;
+    }
+
+
+    private String taskUID;
+
+    public String getTaskUID() {
+        return taskUID;
+    }
+
+    public void setTaskUID(String taskUID) {
+        this.taskUID = taskUID;
+    }
+
 
     private Date time;
 

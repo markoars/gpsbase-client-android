@@ -70,6 +70,10 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
     public static final String KEY_PROVIDER = "provider";
     public static final String KEY_STATUS = "status";
 
+
+    public static final String KEY_USER_COMPANY_UID = "userCompanyUID";
+    public static final String KEY_USER_CLIENT_UID = "userClientUID";
+
     public static final int PERMISSIONS_REQUEST_LOCATION = 2;
 
     private SharedPreferences sharedPreferences;
