@@ -204,7 +204,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     position.setCourse(cursor.getDouble(cursor.getColumnIndex("course")));
                     position.setAccuracy(cursor.getDouble(cursor.getColumnIndex("accuracy")));
                     position.setBattery(cursor.getDouble(cursor.getColumnIndex("battery")));
-
+                    position.setUserId(cursor.getString(cursor.getColumnIndex("battery")));
                     double lat = position.getLatitude();
                     double lon = position.getLongitude();
                     GeoPoint geoPoint = new GeoPoint(lat, lon);
@@ -222,6 +222,54 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return positions;
     }
+
+
+
+
+    public ArrayList<Position> getLocationsByTaskUID(String tableName, String _taskUID) {
+        ArrayList<Position> positions = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + tableName + " WHERE TaskUID ='" + _taskUID + "' ORDER BY id", null);
+        try {
+            if (cursor.getCount() > 0) {
+
+                while(cursor.moveToNext()) {
+
+                    Position position = new Position();
+
+                    position.setId(cursor.getLong(cursor.getColumnIndex("id")));
+                    position.setDeviceId(cursor.getString(cursor.getColumnIndex("deviceId")));
+                    position.setTaskId(cursor.getLong(cursor.getColumnIndex("taskId")));
+                    position.setTaskUID(_taskUID);
+                    position.setTime(new Date(cursor.getLong(cursor.getColumnIndex("time"))));
+                    position.setLatitude(cursor.getDouble(cursor.getColumnIndex("latitude")));
+                    position.setLongitude(cursor.getDouble(cursor.getColumnIndex("longitude")));
+                    position.setAltitude(cursor.getDouble(cursor.getColumnIndex("altitude")));
+                    position.setSpeed(cursor.getDouble(cursor.getColumnIndex("speed")));
+                    position.setCourse(cursor.getDouble(cursor.getColumnIndex("course")));
+                    position.setAccuracy(cursor.getDouble(cursor.getColumnIndex("accuracy")));
+                    position.setBattery(cursor.getDouble(cursor.getColumnIndex("battery")));
+                    position.setUserId(cursor.getString(cursor.getColumnIndex("battery")));
+                    double lat = position.getLatitude();
+                    double lon = position.getLongitude();
+                    GeoPoint geoPoint = new GeoPoint(lat, lon);
+                    position.setGeoPoint(geoPoint);
+
+                    positions.add(position);
+                }
+
+            } else {
+                return null;
+            }
+        } finally {
+            cursor.close();
+        }
+
+        return positions;
+    }
+
+
+
 
     public void selectPositionAsync(final String tableName, DatabaseHandler<Position> handler) {
         new DatabaseAsyncTask<Position>(handler) {

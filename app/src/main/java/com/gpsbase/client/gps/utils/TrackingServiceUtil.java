@@ -9,10 +9,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.preference.CheckBoxPreference;
 import android.preference.PreferenceManager;
-import android.preference.TwoStatePreference;
-import android.support.v4.content.ContextCompat;
+
+import androidx.core.content.ContextCompat;
 
 import com.gpsbase.client.gps.fragments.SettingsFragment;
 import com.gpsbase.client.gps.receivers.AutostartReceiver;

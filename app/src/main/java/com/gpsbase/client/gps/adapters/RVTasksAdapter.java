@@ -6,8 +6,8 @@ package com.gpsbase.client.gps.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +18,6 @@ import com.gpsbase.client.R;
 import com.gpsbase.client.gps.activities.TaskActivity;
 import com.gpsbase.client.gps.models.XTask;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class RVTasksAdapter extends RecyclerView.Adapter<RVTasksAdapter.TaskViewHolder> {

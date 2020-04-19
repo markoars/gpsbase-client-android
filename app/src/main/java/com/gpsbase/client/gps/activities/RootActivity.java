@@ -2,12 +2,11 @@ package com.gpsbase.client.gps.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.gpsbase.client.MainApplication;
 
 /// Root of all AppCompatActivities where all general stuff goes
 public class RootActivity extends AppCompatActivity {

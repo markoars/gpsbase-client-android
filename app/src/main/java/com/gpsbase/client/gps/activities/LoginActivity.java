@@ -1,12 +1,11 @@
 package com.gpsbase.client.gps.activities;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -23,18 +22,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.gpsbase.client.MainApplication;
 import com.gpsbase.client.R;
 
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.gpsbase.client.gps.models.User;
-import com.gpsbase.client.gps.models.XTask;
 import com.gpsbase.client.gps.utils.UserLocalStorage;
-
-import static com.gpsbase.client.gps.fragments.SettingsFragment.KEY_DEVICE;
-import static com.gpsbase.client.gps.fragments.SettingsFragment.KEY_USER_CLIENT_UID;
-import static com.gpsbase.client.gps.fragments.SettingsFragment.KEY_USER_COMPANY_UID;
 
 
 public class LoginActivity extends AppCompatActivity {

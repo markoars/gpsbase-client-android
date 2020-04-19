@@ -1,53 +1,29 @@
 package com.gpsbase.client.gps.fragments;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 import com.gpsbase.client.R;
-import com.gpsbase.client.gps.activities.StatusActivity;
-import com.gpsbase.client.gps.activities.TaskActivity;
-import com.gpsbase.client.gps.models.Client;
-import com.gpsbase.client.gps.models.ClientDetails;
-import com.gpsbase.client.gps.models.Companies;
-import com.gpsbase.client.gps.models.Company;
-import com.gpsbase.client.gps.models.Coordinate;
-import com.gpsbase.client.gps.models.NewTasks;
-import com.gpsbase.client.gps.models.NewUsers;
-import com.gpsbase.client.gps.models.Position;
-import com.gpsbase.client.gps.models.TaskCoordinates;
 import com.gpsbase.client.gps.models.User;
-import com.gpsbase.client.gps.models.Worker;
-import com.gpsbase.client.gps.models.WorkerDetails;
-import com.gpsbase.client.gps.models.WorkerTasks;
 import com.gpsbase.client.gps.models.XTask;
 import com.gpsbase.client.gps.adapters.RVTasksAdapter;
 import com.gpsbase.client.gps.utils.NetworkUtil;
 import com.gpsbase.client.gps.utils.UserLocalStorage;
 
-import java.io.Console;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.lang.Iterable;
 import java.util.List;
-import java.util.Date;
-import java.util.Map;
-
-import static com.gpsbase.client.gps.utils.DatabaseHelper.POSITIONS_TEMP_TABLE;
 
 
 public class TasksFragment extends Fragment {
@@ -120,7 +96,7 @@ public class TasksFragment extends Fragment {
 
         /// Root companies
 
-        List<Position> positions = new ArrayList<>();
+        /*List<Position> positions = new ArrayList<>();
         Position position = new Position();
         position.setId(1);
         position.setLatitude(11111);
@@ -200,14 +176,14 @@ public class TasksFragment extends Fragment {
 
         WorkerTasks workerTasks = new WorkerTasks();
         workerTasks.workerId = "JXBluJp8AQZ2FVeqdMNnDbAt3RS2";//"8bWZdKAftgTSkmyQVR0o7fYFkdM2";
-        workerTasks.tasks = tasks;
+        workerTasks.tasks = tasks;*/
 
         // 0) User pays/sets trial by providing an email, and company name ->
             // 0.1) we create a new user by code and send his password by an email
             // 0.2) we create a company and set a User/Worker
 
-        String companyId = "-LVDzu70Z23goqujCENc";
-        String userId = "79AYbvImGUXT67zYULtxca0XEAB3";//"8bWZdKAftgTSkmyQVR0o7fYFkdM2";
+       // String companyId = "-LVDzu70Z23goqujCENc";
+       // String userId = "79AYbvImGUXT67zYULtxca0XEAB3";//"8bWZdKAftgTSkmyQVR0o7fYFkdM2";
 
         // 1) Companies
 
@@ -223,7 +199,7 @@ public class TasksFragment extends Fragment {
 
 
 
-        String newCompanyKey = companiesRef.push().getKey();
+        /*String newCompanyKey = companiesRef.push().getKey();
 
         // Kokrisnikot plakja i vnesuva ime na kompanija i user email i password (nie mu generirame)
         User userNew;
@@ -233,7 +209,7 @@ public class TasksFragment extends Fragment {
         userNew.firstName = "Marko";
         userNew.lastName = "Arsovski";
         userNew.companyName = company.getName();
-        userNew.companyUID = newCompanyKey;
+        userNew.companyUID = newCompanyKey;*/
 
        /* Map newCompanyAndUserData = new HashMap();
 
@@ -297,7 +273,7 @@ public class TasksFragment extends Fragment {
         // Admin creates a task (also can add workers to it)
 
 
-        /*DatabaseReference companyTasksRef = FirebaseDatabase.getInstance().getReference("CompanyTasks/Company/" + companyId + "/Tasks/");
+    /*  DatabaseReference companyTasksRef = FirebaseDatabase.getInstance().getReference("CompanyTasks/Company/" + companyId + "/Tasks/");
 
         String newTaskKey = companyTasksRef.push().getKey();
 
@@ -305,8 +281,6 @@ public class TasksFragment extends Fragment {
 
         task.taskUID = newTaskKey;
 
-       // companyTasksMap.put("CompanyTasks/Company/" + companyId + "/Tasks/" + newTaskKey, task);
-       // companyTasksMap.put("CompanyTasksDetails/Company/" + companyId + "/Tasks/" + newTaskKey, task);
         companyTasksMap.put("WorkerTasks/Workers/" + userId + "/Tasks/" + newTaskKey, task);
         companyTasksMap.put("WorkerTasksDetails/Workers/" + userId + "/Tasks/" + newTaskKey, task);
 
@@ -321,8 +295,8 @@ public class TasksFragment extends Fragment {
                     System.out.println("Firebase. Error = " + error);
                 }
             }
-        });*/
-
+        });
+    */
         // 5) Assign users to tasks -> Create worker tasks
 
 
