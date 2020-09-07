@@ -26,6 +26,7 @@ import java.util.Date;
 
 public class Position {
 
+
     public Position() {
     }
 
@@ -36,11 +37,12 @@ public class Position {
         this.userId = _userUID;
         this.clientUID = _clientUID;
         this.time = new Date(location.getTime());
+        this.dateTimeInMilliseconds = location.getTime();
         this.latitude = location.getLatitude();
         this.longitude = location.getLongitude();
         this.geoPoint = new GeoPoint(latitude, longitude);
         this.altitude = location.getAltitude();
-        this.speed = location.getSpeed() * 1.943844; // speed in knots
+        this.speed = location.getSpeed(); //* 1.943844; // speed in knots
         this.course = location.getBearing();
         if (location.getProvider() != null && !location.getProvider().equals(LocationManager.GPS_PROVIDER)) {
             this.accuracy = location.getAccuracy();
@@ -111,7 +113,6 @@ public class Position {
 
 
     private Date time;
-
     public Date getTime() {
         return time;
     }
@@ -120,6 +121,16 @@ public class Position {
         this.time = time;
     }
 
+
+    private long dateTimeInMilliseconds;
+
+    public long getDateTimeInMilliseconds() {
+        return dateTimeInMilliseconds;
+    }
+
+    public void setDateTimeInMilliseconds(long dateTimeInMilliseconds) {
+        this.dateTimeInMilliseconds = dateTimeInMilliseconds;
+    }
 
     private GeoPoint geoPoint;
 

@@ -33,7 +33,7 @@ import java.util.List;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION = 15;
+    public static final int DATABASE_VERSION = 16;
     public static final String DATABASE_NAME = "gpsbase.db";
 
 
@@ -88,6 +88,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "clientUID TEXT," +
                 "deviceId TEXT," +
                 "time INTEGER," +
+                "dateTimeInMilliseconds REAL," +
                 "latitude REAL," +
                 "longitude REAL," +
                 "altitude REAL," +
@@ -104,6 +105,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "clientUID TEXT," +
                 "deviceId TEXT," +
                 "time INTEGER," +
+                "dateTimeInMilliseconds REAL," +
                 "latitude REAL," +
                 "longitude REAL," +
                 "altitude REAL," +
@@ -128,6 +130,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put("clientUID", position.getClientUID());
         values.put("deviceId", position.getDeviceId());
         values.put("time", position.getTime().getTime());
+        values.put("dateTimeInMilliseconds", position.getDateTimeInMilliseconds());
         values.put("latitude", position.getLatitude());
         values.put("longitude", position.getLongitude());
         values.put("altitude", position.getAltitude());
@@ -163,6 +166,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 position.setId(cursor.getLong(cursor.getColumnIndex("id")));
                 position.setDeviceId(cursor.getString(cursor.getColumnIndex("deviceId")));
                 position.setTime(new Date(cursor.getLong(cursor.getColumnIndex("time"))));
+                position.setDateTimeInMilliseconds(cursor.getLong(cursor.getColumnIndex("dateTimeInMilliseconds")));
                 position.setLatitude(cursor.getDouble(cursor.getColumnIndex("latitude")));
                 position.setLongitude(cursor.getDouble(cursor.getColumnIndex("longitude")));
                 position.setAltitude(cursor.getDouble(cursor.getColumnIndex("altitude")));
@@ -197,6 +201,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     position.setDeviceId(cursor.getString(cursor.getColumnIndex("deviceId")));
                     position.setTaskId(_taskId);
                     position.setTime(new Date(cursor.getLong(cursor.getColumnIndex("time"))));
+                    position.setDateTimeInMilliseconds(cursor.getLong(cursor.getColumnIndex("dateTimeInMilliseconds")));
                     position.setLatitude(cursor.getDouble(cursor.getColumnIndex("latitude")));
                     position.setLongitude(cursor.getDouble(cursor.getColumnIndex("longitude")));
                     position.setAltitude(cursor.getDouble(cursor.getColumnIndex("altitude")));
@@ -242,6 +247,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     position.setTaskId(cursor.getLong(cursor.getColumnIndex("taskId")));
                     position.setTaskUID(_taskUID);
                     position.setTime(new Date(cursor.getLong(cursor.getColumnIndex("time"))));
+                    position.setDateTimeInMilliseconds(cursor.getLong(cursor.getColumnIndex("dateTimeInMilliseconds")));
                     position.setLatitude(cursor.getDouble(cursor.getColumnIndex("latitude")));
                     position.setLongitude(cursor.getDouble(cursor.getColumnIndex("longitude")));
                     position.setAltitude(cursor.getDouble(cursor.getColumnIndex("altitude")));

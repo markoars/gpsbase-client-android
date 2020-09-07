@@ -252,6 +252,7 @@ public class TrackingController implements PositionProvider.PositionListener, Ne
 
         String currentClientUID = localStorage.getCurrentClientUID();
         String taskId = loggedUser.getCurrentTaskUID();
+        position.setUserId(loggedUser.getUserUID());
 
 
         taskCoordinates = FirebaseDatabase.getInstance().getReference("Coordinates/Companies/" + currentCompanyUID + "/Clients/" + currentClientUID + "/Tasks/" + taskId + "/Coordinates/");

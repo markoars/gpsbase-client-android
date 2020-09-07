@@ -13,12 +13,17 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.gpsbase.client.MainApplication;
 import com.gpsbase.client.R;
+import com.gpsbase.client.gps.models.Coordinate;
 import com.gpsbase.client.gps.models.Position;
 import com.gpsbase.client.gps.models.User;
+import com.gpsbase.client.gps.models.XTask;
 import com.gpsbase.client.gps.utils.DatabaseHelper;
 import com.gpsbase.client.gps.utils.TrackingServiceUtil;
 import com.gpsbase.client.gps.utils.UserLocalStorage;
@@ -72,6 +77,8 @@ public class TaskActivity extends RootActivity {
     private String companyUID;
     private  Context context;
 
+
+    //public List<Position> positions = new ArrayList<>();
 
     private static final int PERMISSIONS_REQUEST_LOCATION = 2;
     public static final String KEY_STATUS = "status";
@@ -329,6 +336,40 @@ public class TaskActivity extends RootActivity {
         }
     }
 
+    /// Treba da vleceme od Firebase namesto da vleceme od local DB i nekako da se napravi da ne
+    // se recitaat na sekoj resume odndosno promena na koordinata
+  /*  public List<Position> getCoordinatesFromFirebase()
+    {
+        UserLocalStorage localStorage = new UserLocalStorage(getApplicationContext());
+        User loggedUser = localStorage.getLoggedInUser();
+
+        String coordURL = "Coordinates/Companies/" + loggedUser.getCompanyUID() + "/Clients/" + clientUID + "/Tasks/" + taskUID + "/";
+        DatabaseReference taskCoordinates = FirebaseDatabase.getInstance().getReference(coordURL);
+
+      //  polls.addListenerForSingleValueEvent(new ValueEventListener() {
+       //                                          @Override
+
+        taskCoordinates.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+                for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
+                    Position coord = childSnapshot.getValue(Position.class);
+
+                    //coordinates.add(coord);
+                }
+
+
+               // return coordinates;
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Log.e(TAG, databaseError.toString();
+            }
+        });
+    }*/
 
 
     private void addSimpleMarker(GeoPoint point) {
