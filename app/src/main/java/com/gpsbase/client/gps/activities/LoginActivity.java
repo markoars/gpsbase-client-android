@@ -35,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText inputEmail, inputPassword;
     private FirebaseAuth auth;
     private ProgressBar progressBar;
-    private Button btnSignup, btnLogin, btnReset;
+    private Button btnSignup, btnLogin, btnReset, btnRegister;
     private static Context mContext;
 
 
@@ -68,6 +68,7 @@ public class LoginActivity extends AppCompatActivity {
        // btnSignup = (Button) findViewById(R.id.btn_signup);
         btnLogin = (Button) findViewById(R.id.btn_login);
         btnReset = (Button) findViewById(R.id.btn_reset_password);
+        btnRegister = (Button) findViewById(R.id.btn_register);
 
 
       /*  btnSignup.setOnClickListener(new View.OnClickListener() {
@@ -77,10 +78,18 @@ public class LoginActivity extends AppCompatActivity {
             }
         });*/
 
+        btnRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
+            }
+        });
+
         btnReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // startActivity(new Intent(LoginActivity.this, ResetPasswordActivity.class));
+                startActivity(new Intent(LoginActivity.this, ResetPasswordActivity.class));
             }
         });
 
@@ -130,6 +139,11 @@ public class LoginActivity extends AppCompatActivity {
 
                                             User user = dataSnapshot.getValue(User.class);
 
+                                            if(user == null)
+                                            {
+                                                user = new User("","","","","","","", "", "");
+                                            }
+
                                             UserLocalStorage localStorage = new UserLocalStorage(mContext);
                                             localStorage.storeUserData(user);
 
@@ -162,9 +176,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected  void onResume() {
-
         super.onResume();
-
     }
 
 }

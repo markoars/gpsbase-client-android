@@ -28,6 +28,7 @@ public class UserLocalStorage {
         userLocalDatabaseEditor.putString("userUID", user.getUserUID());
         userLocalDatabaseEditor.putString("firstName", user.getFirstName());
         userLocalDatabaseEditor.putString("lastName", user.getLastName());
+        userLocalDatabaseEditor.putString("email", user.getEmail());
         userLocalDatabaseEditor.putString("companyName", user.getCompanyName());
         userLocalDatabaseEditor.putString("companyUID", user.getCompanyUID());
         userLocalDatabaseEditor.putString("currentTaskUID", user.getCurrentTaskUID());
@@ -83,9 +84,12 @@ public class UserLocalStorage {
         String companyName = userLocalDatabase.getString("companyName", "");
         String companyUID = userLocalDatabase.getString("companyUID", "");
         String currentTaskUID = userLocalDatabase.getString("currentTaskUID", "");
+        String email = userLocalDatabase.getString("email", "");
+        String status = userLocalDatabase.getString("status", "");
+        String avatarImage = userLocalDatabase.getString("avatarImage", "");
 
 
-        User user = new User(userUID, firstName, lastName, companyName, companyUID, currentTaskUID);
+        User user = new User(userUID, firstName, lastName, companyName, companyUID, currentTaskUID, email, status, avatarImage);
         return user;
     }
 }

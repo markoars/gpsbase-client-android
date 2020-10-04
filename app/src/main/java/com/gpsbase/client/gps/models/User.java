@@ -9,6 +9,9 @@ public class User {
     public String userUID;
     public String firstName;
     public String lastName;
+    public String email;
+    public String status;
+    public String avatarImage;
 
     public String companyName;
     public String companyUID;
@@ -21,13 +24,19 @@ public class User {
                 String lastName,
                 String companyName,
                 String companyUID,
-                String currentTaskUID) {
+                String currentTaskUID,
+                String email,
+                String status,
+                String avatarImage) {
         this.userUID = userUID;
         this.firstName = firstName;
         this.lastName = lastName;
         this.companyName = companyName;
         this.companyUID = companyUID;
         this.currentTaskUID = currentTaskUID;
+        this.email = email;
+        this.status = status;
+        this.avatarImage = avatarImage;
     }
 
 
@@ -66,5 +75,14 @@ public class User {
     public String getCurrentTaskUID() {
         return currentTaskUID;
     }
+
+
+    public String getEmail() { return email; }
+
+
+    public String getStatus() { return status; }
+
+    public String getAvatarImage() { return avatarImage; }
+
 
 }

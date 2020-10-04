@@ -25,7 +25,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.gpsbase.client.R;
 import com.gpsbase.client.gps.fragments.HomeFragment;
 import com.gpsbase.client.gps.fragments.TabFragment;
+import com.gpsbase.client.gps.models.User;
 import com.gpsbase.client.gps.other.CircleTransform;
+import com.gpsbase.client.gps.utils.UserLocalStorage;
 
 
 public class MainActivity extends RootActivity implements HomeFragment.OnFragmentInteractionListener {
@@ -60,6 +62,9 @@ public class MainActivity extends RootActivity implements HomeFragment.OnFragmen
     private boolean shouldLoadHomeFragOnBackPress = true;
     private Handler mHandler;
 
+    public UserLocalStorage localStorage;
+    public User loggedUser;
+
     private static int RC_SIGN_IN = 100;
 
     @Override
@@ -69,6 +74,8 @@ public class MainActivity extends RootActivity implements HomeFragment.OnFragmen
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        localStorage = new UserLocalStorage(this);
+        loggedUser = localStorage.getLoggedInUser();
 
         // Log in Firebase simple example
        /* List<AuthUI.IdpConfig> providers;
@@ -151,8 +158,9 @@ public class MainActivity extends RootActivity implements HomeFragment.OnFragmen
      */
     private void loadNavHeader() {
         // name, website
-        txtName.setText("Marko Arsovski");
-        txtWebsite.setText("www.gpsbase.info");
+        String nameLastName = loggedUser.getFirstName() + " " + loggedUser.getLastName();
+        txtName.setText(nameLastName);
+        txtWebsite.setText(loggedUser.getCompanyName());
 
         // loading header background image
        /* Glide.with(this).load(urlNavHeaderBg)

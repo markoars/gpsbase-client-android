@@ -2,17 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.gpsbase.client">
 
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-
     <application
         android:name=".MainApplication"
         android:allowBackup="true"
@@ -20,8 +9,11 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".gps.activities.ResetPasswordActivity" android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".gps.activities.RegisterActivity" android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".gps.activities.SettingsActivity" />
-        <activity android:name=".gps.activities.LoginActivity"
+        <activity
+            android:name=".gps.activities.LoginActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -33,15 +25,11 @@
         <activity
             android:name=".gps.activities.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".gps.activities.StatusActivity" />
         <activity android:name=".gps.activities.AboutActivity" />
         <activity android:name=".gps.activities.TaskActivity" />
         <activity android:name=".gps.activities.ShortcutActivity" />
-
-        <service android:name=".gps.services.TrackingService" />
-        <service android:name=".gps.services.TrackingService$HideNotificationService" />
 
         <receiver android:name=".gps.receivers.AutostartReceiver">
             <intent-filter>
@@ -52,6 +40,19 @@
             </intent-filter>
         </receiver>
 
+        <service android:name=".gps.services.TrackingService" />
+        <service android:name=".gps.services.TrackingService$HideNotificationService" />
     </application>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
 </manifest>

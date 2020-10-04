@@ -59,33 +59,25 @@
     <string name="nav_about_us">About Us</string>
 
     <!-- Toolbar titles when navigation menu item is selected -->
-    <string-array name="nav_item_activity_titles">
-        <item>Tasks</item>
-        <item>Home</item>
-        <item>Notifications</item>
-        <item>Settings</item>
-        <item>AboutUs</item>
-    </string-array>
-
     <string name="activity_title_about_us">About Us</string>
+
     <string name="activity_title_privacy_policy">Privacy Policy</string>
     <string name="action_clear_all">Clear All</string>
     <string name="action_logout">Logout</string>
     <string name="action_mark_all_read">Mark All as Read</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="tasks">Tasks</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="tasks">Tasks</string>
     <string name="title_activity_about_us">AboutUsActivity</string>
     <string name="title_activity_privacy_policy">PrivacyPolicyActivity</string>
     <string name="title_activity_test">TestActivity</string>
+    <string name="btn_start_logging">Start Logging</string>
     <!--- Nav drawer values - END-->
 
 
-
     <!--- GPS Logger -->
-    <string name="btn_start_logging">Start Logging</string>
     <string name="btn_stop_logging">Stop Logging</string>
     <string name="accuracy_filter_title">Accuracy Filter</string>
     <string name="accuracy_filter_summary">The minimum precision required for a point to be saved. Points that aren\'t this accurate will be discarded.</string>
@@ -94,8 +86,8 @@
     <string name="points">points</string>
     <string name="txt_number_of_points">Number of points</string>
     <string name="save">Save</string>
-    <!-- main form labels -->
     <string name="txt_latitude">Latitude:</string>
+    <!-- main form labels -->
     <string name="txt_longitude">Longitude:</string>
     <string name="txt_altitude">Altitude:</string>
     <string name="txt_speed">Speed:</string>
@@ -105,11 +97,10 @@
     <string name="txt_travel_distance">Travelled:</string>
     <string name="txt_travel_duration">Duration:</string>
     <string name="task_status_active"><b>ACTIVE</b></string>
-
+    <string name="action_sign_in_short">Register</string>
 
 
     <!--- Login activity -->
-    <string name="action_sign_in_short">Register</string>
     <string name="email">Email</string>
     <string name="minimum_password">Password too short, enter minimum 6 characters!</string>
     <string name="auth_failed">Authentication failed, check your email and password or sign up</string>
@@ -122,9 +113,11 @@
     <string name="title_activity_login">Sign in</string>
     <string name="hint_email">Email</string>
     <string name="hint_password">Password</string>
+    <string name="confirm_password">Confirm password</string>
     <string name="hint_name">Fullname</string>
     <string name="btn_login">LOGIN</string>
-    <string name="btn_link_to_register">Not a member? Get registered in Firebase now!</string>
+    <string name="btn_login_google">Login with Google</string>
+    <string name="btn_link_to_register">Not a member? Get registered now!</string>
     <string name="btn_link_to_login">Already registered. Login Me!</string>
     <string name="title_activity_reset_password">ResetPasswordActivity</string>
     <string name="btn_forgot_password">Forgot your password?</string>
@@ -137,6 +130,13 @@
     <string name="btn_sign_out">Sign Out</string>
     <string name="lbl_forgot_password">Forgot password?</string>
     <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
+    <string-array name="nav_item_activity_titles">
+        <item>Tasks</item>
+        <item>Home</item>
+        <item>Notifications</item>
+        <item>Settings</item>
+        <item>AboutUs</item>
+    </string-array>
 
 
 </resources>
