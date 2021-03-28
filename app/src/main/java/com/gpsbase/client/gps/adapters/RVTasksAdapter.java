@@ -18,6 +18,7 @@ import com.gpsbase.client.R;
 import com.gpsbase.client.gps.activities.TaskActivity;
 import com.gpsbase.client.gps.models.XTask;
 
+import java.util.Calendar;
 import java.util.List;
 
 public class RVTasksAdapter extends RecyclerView.Adapter<RVTasksAdapter.TaskViewHolder> {
@@ -25,23 +26,21 @@ public class RVTasksAdapter extends RecyclerView.Adapter<RVTasksAdapter.TaskView
     public static class TaskViewHolder extends RecyclerView.ViewHolder {
 
         CardView cardView;
-        TextView txtTaskId;
         TextView txtTaskDescription;
         TextView txtTaskStart;
         TextView txtTaskStatus;
-        //ImageView image;
+        TextView txtClientname;
         XTask task;
 
         TaskViewHolder(View itemView) {
             super(itemView);
             cardView = itemView.findViewById(R.id.cv_task);
-            txtTaskId = itemView.findViewById(R.id.cardTask_task_id);
+           // txtTaskId = itemView.findViewById(R.id.cardTask_task_id);
+            txtClientname = itemView.findViewById(R.id.task_client_name);
             txtTaskDescription = itemView.findViewById(R.id.cardTask_task_description);
             txtTaskStart = itemView.findViewById(R.id.task_start);
             txtTaskStatus = itemView.findViewById(R.id.card_task_task_status);
 
-
-            //image = (ImageView)itemView.findViewById(R.id.person_photo);
 
 
             cardView.setOnClickListener(new View.OnClickListener() {
@@ -53,6 +52,8 @@ public class RVTasksAdapter extends RecyclerView.Adapter<RVTasksAdapter.TaskView
                     i.putExtra("taskDescription", task.getTaskDescription());
                     i.putExtra("clientId", task.getClientId());
                     i.putExtra("clientUID", task.getClientUID());
+                    i.putExtra("clientName", task.getClientName());
+
 
                     view.getContext().startActivity(i);
                 }
@@ -83,9 +84,23 @@ public class RVTasksAdapter extends RecyclerView.Adapter<RVTasksAdapter.TaskView
     @Override
     public void onBindViewHolder(TaskViewHolder taskViewHolder, int i) {
         String taskText = "#" + Long.toString(tasks.get(i).taskId);
-        taskViewHolder.txtTaskId.setText(taskText);
+        String day = "??", month = "??", year = "????";
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(tasks.get(i).taskStart);
+
+        if(tasks.get(i).taskStartString.length() > 10) {
+            month = tasks.get(i).taskStartString.substring(5, 7);
+            day = tasks.get(i).taskStartString.substring(8,10);
+            year = tasks.get(i).taskStartString.substring(0,4);
+        }
+
+        String hour = String.valueOf(cal.get(Calendar.HOUR_OF_DAY));
+        String minute = String.valueOf(cal.get(Calendar.MINUTE));
+
+
+        taskViewHolder.txtClientname.setText(tasks.get(i).clientName);
         taskViewHolder.txtTaskDescription.setText(tasks.get(i).taskDescription);
-        taskViewHolder.txtTaskStart.setText(tasks.get(i).taskStartString);
+        taskViewHolder.txtTaskStart.setText(day + "." + month + "." + year + " " + hour + ":" + minute);
         taskViewHolder.task = tasks.get(i);
 
         String currentTrackingTaskId = ((MainApplication) context.getApplicationContext()).getCurrentTrackingTaskUID();
@@ -98,7 +113,6 @@ public class RVTasksAdapter extends RecyclerView.Adapter<RVTasksAdapter.TaskView
                 taskViewHolder.txtTaskStatus.setVisibility(View.GONE);
             }
         }
-       // taskViewHolder.personPhoto.setImageResource(persons.get(i).photoId);
     }
 
     @Override

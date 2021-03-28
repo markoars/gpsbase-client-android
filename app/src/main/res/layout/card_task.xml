@@ -33,6 +33,7 @@
                 android:scaleType="centerCrop"
                 />
         -->
+            <!--
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -40,15 +41,16 @@
                 android:layout_alignParentLeft="true"
                 android:textSize="30sp"
                 />
-
+            -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:id="@+id/card_task_task_status"
                 android:text="@string/task_status_active"
+                android:textStyle="bold"
                 android:textColor="@color/primary"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:paddingTop="5sp"
                 />
 
@@ -56,8 +58,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/cardTask_task_description"
-                android:layout_below="@+id/cardTask_task_id"
-                android:paddingTop="2dp"
+                android:textStyle="bold"
+                android:textSize="19sp"
+                android:paddingTop="3dp"
+                android:text="Task description"
                 />
 
             <TextView
@@ -65,9 +69,19 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/task_start"
                 android:layout_below="@+id/cardTask_task_description"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:paddingTop="2dp"
+                android:textSize="12sp"
+                android:paddingTop="4dp"
+                android:text="25.01.2021"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/task_client_name"
+                android:layout_below="@+id/task_start"
+                android:textSize="14sp"
+                android:paddingTop="3dp"
+                android:text="ddd"
                 />
 
 

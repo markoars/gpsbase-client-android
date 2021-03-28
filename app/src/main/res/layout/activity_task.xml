@@ -8,13 +8,18 @@
 
 
 
-    <RelativeLayout android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         >
 
         <LinearLayout
             android:gravity="center"
             android:orientation="vertical"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:custom="http://schemas.android.com/apk/res-auto"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent">
 
@@ -24,7 +29,7 @@
                 android:layout_height="fill_parent">
                 <org.osmdroid.views.MapView android:id="@+id/map_osm"
                     android:layout_width="fill_parent"
-                    android:layout_height="150dp" />
+                    android:layout_height="350dp" />
             </LinearLayout>
 
 
@@ -35,36 +40,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp">
 
-
-                <!-- Task name row -->
-                <TableRow>
-
-                    <LinearLayout
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content">
-
-
-
-
-                        <TextView
-                            android:layout_alignParentRight="true"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/activityTask_task_id"
-                            android:textSize="@dimen/task_client_name_textsize"
-                            android:text="1111"
-                            android:fontFamily="sans-serif"
-                            android:textStyle="italic"
-                            android:background="@null"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            />
-
-                    </LinearLayout>
-                </TableRow>
 
                 <!-- Task description row -->
                 <TableRow>
@@ -83,13 +58,15 @@
                             android:layout_weight="1"
                             android:layout_height="wrap_content"
                             android:id="@+id/activityTask_task_description"
-                            android:textSize="@dimen/task_client_description_textsize"
+                            android:textSize="@dimen/task_client_name_textsize"
                             android:fontFamily="sans-serif"
                             android:textStyle="italic"
                             android:background="@null"
                             android:layout_gravity="center"
                             android:gravity="center"
-                            android:text="222"
+                            android:maxWidth="90dp"
+                            android:maxHeight="50dp"
+                            android:text="Tsk descr "
                             />
 
                     </LinearLayout>
@@ -124,164 +101,6 @@
 
                 </TableRow>
 
-                <!-- Icons row -->
-                <TableRow
-                    android:layout_gravity="center"
-                    android:orientation="horizontal"
-                    >
-
-                    <GridLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:useDefaultMargins="true"
-                        android:alignmentMode="alignBounds"
-                        android:columnOrderPreserved="false"
-                        android:columnCount="4"
-                        android:rowCount="3"
-                        >
-
-                        <!-- Images row 1 -->
-                        <ImageView
-                            android:id="@+id/activity_task_imgSatelliteCount"
-                            android:layout_width="@dimen/activity_task_grid_iconwidth"
-                            android:layout_height="@dimen/activity_task_grid_iconheight"
-                            android:layout_gravity="left|center"
-                            android:layout_column="0"
-                            android:layout_row="0"
-                            android:src="@drawable/satellite_count"
-                            android:contentDescription="@string/txt_satellites"
-                            />
-
-                        <TextView
-                            android:id="@+id/activity_task_txtSatelliteCount"
-                            android:layout_gravity="left|center"
-                            android:layout_width="@dimen/activity_task_grid_labelwidth"
-                            android:layout_height="22dp"
-                            android:layout_column="1"
-                            android:layout_row="0"
-                            android:text="3"
-                            />
-
-
-                        <ImageView
-                            android:id="@+id/activity_task_imgAccuracy"
-                            android:layout_gravity="center|top"
-                            android:layout_width="@dimen/activity_task_grid_iconwidth"
-                            android:layout_height="@dimen/activity_task_grid_iconheight"
-                            android:src="@drawable/accuracy"
-                            android:layout_row="0"
-                            android:layout_column="2"
-                            android:contentDescription="@string/txt_accuracy"
-                            />
-
-
-                        <TextView
-                            android:id="@+id/activity_task_txtAccuracy"
-                            android:layout_gravity="left|center"
-                            android:layout_row="0"
-
-                            android:layout_column="3"
-                            android:layout_width="@dimen/activity_task_grid_labelwidth"
-                            android:layout_height="wrap_content"
-                            android:text="25 meters"
-                            />
-
-
-
-
-
-                        <!-- Images row 2 -->
-                        <ImageView
-                            android:id="@+id/activity_task_distance"
-                            android:layout_gravity="center|top"
-                            android:layout_width="@dimen/activity_task_grid_iconwidth"
-                            android:layout_height="@dimen/activity_task_grid_iconheight"
-                            android:src="@drawable/distance"
-                            android:layout_column="0"
-                            android:layout_row="1"
-                            android:contentDescription="@string/txt_travel_distance"
-                            />
-
-                        <TextView
-                            android:id="@+id/activity_task_txtDistance"
-                            android:layout_gravity="left|center"
-
-                            android:layout_height="wrap_content"
-                            android:layout_column="1"
-                            android:layout_row="1"
-                            android:text="1560 meters"
-                            />
-
-                        <ImageView
-                            android:id="@+id/activity_task_points"
-                            android:layout_gravity="center|top"
-                            android:layout_width="@dimen/activity_task_grid_iconwidth"
-                            android:layout_height="@dimen/activity_task_grid_iconheight"
-                            android:src="@drawable/points"
-                            android:layout_column="2"
-                            android:layout_row="1"
-                            android:contentDescription="@string/txt_number_of_points"
-                            />
-
-                        <TextView
-                            android:id="@+id/activity_task_txtPoints"
-                            android:layout_gravity="left|center"
-
-                            android:layout_height="wrap_content"
-                            android:layout_column="3"
-                            android:layout_row="1"
-                            android:text="325"
-                            />
-
-
-
-                        <!-- Images row 3 -->
-                        <ImageView
-                            android:id="@+id/activity_task_imgDuration"
-                            android:layout_gravity="center|top"
-                            android:layout_width="@dimen/activity_task_grid_iconwidth"
-                            android:layout_height="@dimen/activity_task_grid_iconheight"
-                            android:src="@drawable/duration"
-                            android:layout_column="0"
-                            android:layout_row="2"
-                            android:contentDescription="@string/txt_travel_duration"
-                            />
-
-                        <TextView
-                            android:id="@+id/activity_task_txtDuration"
-                            android:layout_gravity="left|center"
-                            android:layout_width="@dimen/activity_task_grid_labelwidth"
-                            android:layout_height="wrap_content"
-                            android:layout_column="1"
-                            android:layout_row="2"
-                            android:text="2h 15min"
-                            />
-
-                        <ImageView
-                            android:id="@+id/activity_task_imgSpeed"
-                            android:layout_gravity="center|top"
-                            android:layout_width="@dimen/activity_task_grid_iconwidth"
-                            android:layout_height="@dimen/activity_task_grid_iconheight"
-                            android:src="@drawable/speed"
-                            android:layout_column="2"
-                            android:layout_row="2"
-                            android:contentDescription="@string/txt_speed"
-                            />
-
-                        <TextView
-                            android:id="@+id/activity_task_txtSpeed"
-                            android:layout_gravity="left|center"
-                            android:layout_width="@dimen/activity_task_grid_labelwidth"
-                            android:layout_height="wrap_content"
-                            android:layout_column="3"
-                            android:layout_row="2"
-                            android:text="15 km/s"
-                            />
-
-
-
-                    </GridLayout>
-                </TableRow>
 
 
                 <!-- Delete records by task id button row -->

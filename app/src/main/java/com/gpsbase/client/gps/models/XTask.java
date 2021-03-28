@@ -16,8 +16,9 @@ public class XTask {
     public Date taskStart;
     public String taskStartString;
     public long photoId;
-    public int clientId;
+    public String clientId;
     public String clientUID;
+    public String clientName;
 
     public List<Position> positions = new ArrayList<>();
 
@@ -27,8 +28,9 @@ public class XTask {
                    String taskDescription,
                    String taskStartString,
                    Date taskStart,
-                   int clientId,
+                   String clientId,
                    String clientUID,
+                   String clientName,
                    long photoId) {
         this.taskDescription = taskDescription;
         this.taskUID = taskUID;
@@ -37,6 +39,7 @@ public class XTask {
         this.taskStartString = taskStartString;
         this.clientId = clientId;
         this.clientUID = clientUID;
+        this.clientName = clientName;
         this.photoId = photoId;
     }
 
@@ -55,8 +58,9 @@ public class XTask {
         return taskStart;
     }
     public String getTaskStartString() { return  taskStartString; }
-    public int getClientId() { return clientId;}
+    public String getClientId() { return clientId;}
     public String getClientUID() { return clientUID; }
+    public String getClientName() { return clientName;}
     public long getPhotoId() { return photoId; }
     public List<Position> getPositions() { return positions; }
 

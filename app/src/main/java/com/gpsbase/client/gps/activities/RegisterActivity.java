@@ -15,6 +15,7 @@ import com.gpsbase.client.R;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -72,6 +73,12 @@ public class RegisterActivity extends AppCompatActivity {
 
                 if (TextUtils.isEmpty(emailInput)) {
                     Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if(Patterns.EMAIL_ADDRESS.matcher(emailInput).matches())
+                {
+                    Toast.makeText(getApplicationContext(), "Enter a valid email address!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 

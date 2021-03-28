@@ -48,15 +48,7 @@ import static com.gpsbase.client.gps.utils.DatabaseHelper.POSITIONS_TABLE;
 
 public class TaskActivity extends RootActivity {
 
-    private TextView taskIdTxt;
     private TextView taskDescriptionTxt;
-    private TextView txtSatelliteCount;
-    private TextView txtAccuracy;
-    private TextView txtDistance;
-    private TextView txtPoints;
-    private TextView txtDuration;
-    private TextView txtSpeed;
-
 
     private MapView map;
     private ArrayList<GeoPoint> points;
@@ -108,18 +100,10 @@ public class TaskActivity extends RootActivity {
 
         points = new ArrayList<>();
         databaseHelper = new DatabaseHelper(this);
-        taskIdTxt = findViewById(R.id.activityTask_task_id);
         taskDescriptionTxt = findViewById(R.id.activityTask_task_description);
-        taskIdTxt.setText(taskIdString);
         taskDescriptionTxt.setText(taskDescr);
         this.setTitle(taskIdString + " - " + taskDescr); // Set action bar title
 
-        txtSatelliteCount = findViewById(R.id.activity_task_txtSatelliteCount);
-        txtAccuracy = findViewById(R.id.activity_task_txtAccuracy);
-        txtDistance = findViewById(R.id.activity_task_txtDistance);
-        txtPoints = findViewById(R.id.activity_task_txtPoints);
-        txtDuration = findViewById(R.id.activity_task_txtDuration);
-        txtSpeed = findViewById(R.id.activity_task_txtSpeed);
 
 
 

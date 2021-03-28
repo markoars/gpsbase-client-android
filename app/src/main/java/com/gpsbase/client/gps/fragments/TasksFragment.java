@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +23,18 @@ import com.gpsbase.client.gps.adapters.RVTasksAdapter;
 import com.gpsbase.client.gps.utils.NetworkUtil;
 import com.gpsbase.client.gps.utils.UserLocalStorage;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 public class TasksFragment extends Fragment {
@@ -32,35 +43,15 @@ public class TasksFragment extends Fragment {
     private RecyclerView rv;
     private RVTasksAdapter adapter;
     NetworkUtil networkUtil;
-
-    public static String testStr = "";
-
-
-    // 1) Companies
-
-    DatabaseReference companiesRef = FirebaseDatabase.getInstance().getReference("Company");
-    DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users");
-    DatabaseReference companyClientsRef = FirebaseDatabase.getInstance().getReference("CompanyClients");
-    DatabaseReference companyClientsDetailsRef = FirebaseDatabase.getInstance().getReference("CompanyClientsDetails");
-
-    DatabaseReference distributionComapniesRef = FirebaseDatabase.getInstance().getReference("DistributionCompanies");
-    DatabaseReference metoCompanyClientsRef = FirebaseDatabase.getInstance().getReference("DistributionCompanies/Meto Flyer company/clients");
-    DatabaseReference metoPositionsRef = FirebaseDatabase.getInstance().getReference("DistributionCompanies/Meto Flyer company/clients/Tinex/tasks/1/positions");
-    DatabaseReference tasksByUserRef = FirebaseDatabase.getInstance().getReference("TasksByUser/Users/8bWZdKAftgTSkmyQVR0o7fYFkdM2");
-    DatabaseReference coordinatesRef = FirebaseDatabase.getInstance().getReference("Coordinates/Companies/1/Clients/1/Tasks/1/Coordinates");
-    DatabaseReference workersRef = FirebaseDatabase.getInstance().getReference("Workers/Company/1");
-    DatabaseReference workerDetailsRef = FirebaseDatabase.getInstance().getReference("WorkerDetails/Company/1");
-    DatabaseReference workerTasksRef = FirebaseDatabase.getInstance().getReference("WorkerTasks/Workers");
-    DatabaseReference companyTasksRef = FirebaseDatabase.getInstance().getReference("CompanyTasks/Company");
-
-
-    DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference("");
-    DatabaseReference firebaseRootRef = FirebaseDatabase.getInstance().getReference("NewTasks");
-    DatabaseReference databaseTasks = FirebaseDatabase.getInstance().getReference("Tasks");
-
-
     public UserLocalStorage localStorage;
     public User loggedUser;
+    public int tabNumber = 0;
+
+
+    public TasksFragment(int _tabNum)
+    {
+        tabNumber = _tabNum;
+    }
 
     @Nullable
     @Override
@@ -83,15 +74,14 @@ public class TasksFragment extends Fragment {
         initializeData();
         initializeAdapter();
 
+        viewLoaded = true;
         return view;
     }
 
 
     private void initializeData(){
-       // tasks = networkUtil.getPendingTasks(adapter);
-       // adapter.rebindData();
         tasks = new ArrayList<>();
-        getPendingTasks();
+        getPendingTasks(true);
 
 
         /// Root companies
@@ -303,6 +293,38 @@ public class TasksFragment extends Fragment {
 
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (hidden) {
+            //Log.d(TAG, ((Object) this).getClass().getSimpleName() + " is NOT on screen");
+            int a;
+        }
+        else
+        {
+           // Log.d(TAG, ((Object) this).getClass().getSimpleName() + " is on screen");
+            int b;
+        }
+    }
+
+
+    boolean _areLecturesLoaded = false;
+    boolean viewLoaded = false;
+    boolean tabPendingLoaded = false;
+    boolean tabCompletedLoaded = false;
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && viewLoaded) {
+          //  loadLectures(); this
+            _areLecturesLoaded = true;
+            ;
+            getPendingTasks(false);
+        }
+    }
+
+
     private void initializeAdapter(){
         adapter = new RVTasksAdapter(tasks, this.getContext());
         rv.setAdapter(adapter);
@@ -317,33 +339,60 @@ public class TasksFragment extends Fragment {
     }
 
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 
 
 
-
-    public void getPendingTasks()
+    public void getPendingTasks(boolean _calledFromInit)
     {
         DatabaseReference workerTasksRef = FirebaseDatabase.getInstance().getReference("WorkerTasks/Workers/" + loggedUser.getUserUID());
+        String dateFromStr, dateToStr;
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DAY_OF_MONTH, -5);
+        dateFromStr = formatter.format(cal.getTime());
+        cal.add(Calendar.DAY_OF_MONTH, 10);
+        dateToStr = formatter.format(cal.getTime());
 
-        workerTasksRef.child("Tasks").orderByChild("taskStart").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                tasks.clear();
 
-                for (DataSnapshot childSnapshot: dataSnapshot.getChildren()) {
+        if((tabPendingLoaded == false && tabNumber == 0) || (!_calledFromInit && tabCompletedLoaded == false && tabNumber == 1)) {
+            workerTasksRef.child("Tasks").orderByChild("taskStatusTaskDateKey").startAt(tabNumber + dateFromStr).endAt(tabNumber + dateToStr).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    tasks.clear();
 
-                    XTask task = childSnapshot.getValue(XTask.class);
+                    for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
 
-                    tasks.add(task);
+                        XTask task = childSnapshot.getValue(XTask.class);
+
+                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+
+                        tasks.add(task);
+                    }
+                    adapter.rebindData();
                 }
-                adapter.rebindData();
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Log.e(TAG, databaseError.toString();
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    // Log.e(TAG, databaseError.toString();
+                }
+            });
+        }
+
+        if(tabNumber == 0)
+        {
+            tabPendingLoaded = true;
+        }
+        else
+        {
+            if(!_calledFromInit) {
+                tabCompletedLoaded = true;
             }
-        });
+        }
+
     }
 }
 
