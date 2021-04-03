@@ -70,11 +70,6 @@ public class TaskActivity extends RootActivity {
     private  Context context;
 
 
-    //public List<Position> positions = new ArrayList<>();
-
-    private static final int PERMISSIONS_REQUEST_LOCATION = 2;
-    public static final String KEY_STATUS = "status";
-
 
 
     @Override
@@ -102,7 +97,7 @@ public class TaskActivity extends RootActivity {
         databaseHelper = new DatabaseHelper(this);
         taskDescriptionTxt = findViewById(R.id.activityTask_task_description);
         taskDescriptionTxt.setText(taskDescr);
-        this.setTitle(taskIdString + " - " + taskDescr); // Set action bar title
+        this.setTitle(taskDescr); // Set action bar title
 
 
 

@@ -212,13 +212,13 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.status) {
+       /* if (item.getItemId() == R.id.status) {
             startActivity(new Intent(getActivity(), StatusActivity.class));
             return true;
         } else if (item.getItemId() == R.id.about) {
             startActivity(new Intent(getActivity(), AboutActivity.class));
             return true;
-        }
+        }*/
         return super.onOptionsItemSelected(item);
     }
 

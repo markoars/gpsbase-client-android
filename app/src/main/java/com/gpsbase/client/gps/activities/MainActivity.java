@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.gpsbase.client.R;
 import com.gpsbase.client.gps.fragments.HomeFragment;
 import com.gpsbase.client.gps.fragments.TabFragment;
@@ -42,7 +43,6 @@ public class MainActivity extends RootActivity implements HomeFragment.OnFragmen
 
     // urls to load navigation header background image
     // and profile image
-    private static final String urlNavHeaderBg = "https://api.androidhive.info/images/nav-menu-header-bg.jpg";
     private static final String urlProfileImg = "https://scontent-vie1-1.xx.fbcdn.net/v/t1.0-1/p160x160/12122523_10205834159390008_2946444750842210431_n.jpg?oh=7d3fd7d6429e3b180050367527bd66fd&oe=5A8386CA";
 
     // index to identify current nav menu item
@@ -50,9 +50,6 @@ public class MainActivity extends RootActivity implements HomeFragment.OnFragmen
 
     // tags used to attach the fragments
     private static final String TAG_TASKS = "tasks";
-    private static final String TAG_HOME = "photos";
-    private static final String TAG_NOTIFICATIONS = "notifications";
-    private static final String TAG_SETTINGS = "settings";
     public static String CURRENT_TAG = TAG_TASKS;
 
     // toolbar titles respected to selected nav menu item
@@ -77,18 +74,6 @@ public class MainActivity extends RootActivity implements HomeFragment.OnFragmen
         localStorage = new UserLocalStorage(this);
         loggedUser = localStorage.getLoggedInUser();
 
-        // Log in Firebase simple example
-       /* List<AuthUI.IdpConfig> providers;
-        providers = new ArrayList<>();
-        providers.add(new AuthUI.IdpConfig.Builder(AuthUI.EMAIL_PROVIDER).build());
-
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        startActivityForResult(
-                AuthUI.getInstance()
-                        .createSignInIntentBuilder()
-                        .setAvailableProviders(providers)
-                        .build(),
-                RC_SIGN_IN);*/
 
 
 
@@ -96,7 +81,6 @@ public class MainActivity extends RootActivity implements HomeFragment.OnFragmen
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView = (NavigationView) findViewById(R.id.nav_view);
-       // fab = (FloatingActionButton) findViewById(R.id.fab);
 
         // Navigation view header
         navHeader = navigationView.getHeaderView(0);
@@ -107,14 +91,6 @@ public class MainActivity extends RootActivity implements HomeFragment.OnFragmen
 
         // load toolbar titles from string resources
         activityTitles = getResources().getStringArray(R.array.nav_item_activity_titles);
-
-        /*fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
 
         // load nav menu header data
         loadNavHeader();
@@ -289,26 +265,17 @@ public class MainActivity extends RootActivity implements HomeFragment.OnFragmen
                         navItemIndex = 0;
                         CURRENT_TAG = TAG_TASKS;
                         break;
-                  /*  case R.id.nav_home:
-                        navItemIndex = 1;
-                        CURRENT_TAG = TAG_PHOTOS;
-                        break;
-                    case R.id.nav_movies:
-                        navItemIndex = 2;
-                        CURRENT_TAG = TAG_MOVIES;
-                        break;
-                    case R.id.nav_notifications:
-                        navItemIndex = 3;
-                        CURRENT_TAG = TAG_NOTIFICATIONS;
-                        break;*/
                     case R.id.nav_settings:
                         // launch new intent instead of loading fragment
                         startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                         drawer.closeDrawers();
                         return true;
                     case R.id.nav_about_us:
-                        // launch new intent instead of loading fragment
                         startActivity(new Intent(MainActivity.this, AboutActivity.class));
+                        drawer.closeDrawers();
+                        return true;
+                    case R.id.nav_logout:
+                        FirebaseAuth.getInstance().signOut();
                         drawer.closeDrawers();
                         return true;
                     default:
@@ -399,10 +366,10 @@ public class MainActivity extends RootActivity implements HomeFragment.OnFragmen
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_logout) {
+       /* if (id == R.id.action_logout) {
             Toast.makeText(getApplicationContext(), "Logout user!", Toast.LENGTH_LONG).show();
             return true;
-        }
+        }*/
 
         // user is in notifications fragment
         // and selected 'Mark all as Read'

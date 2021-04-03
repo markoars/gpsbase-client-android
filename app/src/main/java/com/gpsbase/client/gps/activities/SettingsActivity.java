@@ -19,6 +19,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.gpsbase.client.R;
 import com.gpsbase.client.gps.fragments.SettingsFragment;
 
 public class SettingsActivity extends RootActivity {
@@ -32,6 +33,8 @@ public class SettingsActivity extends RootActivity {
 
         // set back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        this.setTitle(R.string.nav_settings);
     }
 
     @Override

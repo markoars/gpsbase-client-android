@@ -28,7 +28,6 @@ import com.gpsbase.client.R;
 
 public class AboutActivity extends RootActivity {
 
-    private Button signOut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +35,6 @@ public class AboutActivity extends RootActivity {
         setContentView(R.layout.activity_about);
 
         TextView title = findViewById(R.id.title);
-        signOut = findViewById(R.id.sign_out);
 
         try {
             title.setText(title.getText() + " " + getPackageManager().getPackageInfo(this.getPackageName(), 0).versionName);
@@ -44,17 +42,11 @@ public class AboutActivity extends RootActivity {
             Log.w(AboutActivity.class.getSimpleName(), e);
         }
 
-
-        signOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signOut();
-            }
-        });
-
-
         // set back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+        this.setTitle(R.string.about); // Set action bar title
     }
 
     @Override
@@ -64,10 +56,4 @@ public class AboutActivity extends RootActivity {
         return true;
     }
 
-    //sign out method
-    public void signOut() {
-        FirebaseAuth.getInstance().signOut();
-       // startActivity(new Intent(AboutActivity.this, LoginActivity.class));
-       // finish();
-    }
 }

@@ -76,7 +76,7 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
-                if(Patterns.EMAIL_ADDRESS.matcher(emailInput).matches())
+                if(TextUtils.isEmpty(emailInput) || !Patterns.EMAIL_ADDRESS.matcher(emailInput).matches())
                 {
                     Toast.makeText(getApplicationContext(), "Enter a valid email address!", Toast.LENGTH_SHORT).show();
                     return;
